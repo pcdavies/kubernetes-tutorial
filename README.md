@@ -126,6 +126,23 @@ Test tutorial
 
 - The following tasks are to be **run on both** the master and node images:
 
+- Optional: If you want to turn off asking for a password when using the `sudo su` command, then follow these tasks:
+    - From your terminal window enter:
+
+    ```
+    sudo visudo
+    ```
+
+    - At the bottom of the file, enter this line:
+
+    ```
+    $USER ALL=(ALL) NOPASSWD:ALL
+    ```
+
+    ![](images/img46.png)
+
+    - Save the file by pressing **Ctrl+X**, then enter **Y** and hit **Enter** to save the file.
+
 - Login as 'sudo' and run the following commands :
 
     ```
@@ -183,6 +200,21 @@ Test tutorial
     ```
 
     ![](images/img24.png)
+
+- ADD NOTE ABOUT NOW TO ADD THE /etc/network/interfaces update
+
+    ```
+    sudo nano /etc/network/interfaces
+    ```
+
+- Change the file
+    ```
+    auto enp0s8
+    iface enp0s8 inet static
+    address 192.168.99.100
+    ```
+
+### Reboot Servers
 
 - As sudo, install open ssh server
 
@@ -367,6 +399,7 @@ Test tutorial
 
     ```
     kubectl get pods -o wide --all-namespaces
+    kubectl get service
     ```
 
     ![](images/img45.png)

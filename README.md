@@ -322,6 +322,12 @@ Test tutorial
 
     ![](images/img41.png)
 
+- enter URL on browser:
+
+    ```
+    http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+    ```
+
     ![](images/img42.png)
 
     ![](images/img43.png)

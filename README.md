@@ -345,7 +345,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 
     ![](images/img33.png)
 
-- Now that the flannel network is install, you shoudl see that the **coredns...** pods are now in a **running** status. You'll need to re-run the command below multiple times until everything restarts.
+- Now that the flannel network is installed, you should see that the **coredns...** pods are now in a **running** status. You'll need to re-run the command below multiple times until everything restarts.
 
     ```
     kubectl get pods -o wide --all-namespaces
@@ -361,7 +361,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Wait for the kube dashboard to show a **Running** state
 
     ```
-    kubectl get pods -o wide --all-namespces
+    kubectl get pods -o wide --all-namespaces
     ```
 
     ![](images/img47.png)
@@ -399,7 +399,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 
     ![](images/img41.png)
 
-- Load the brower window, and enter the following URL:
+- Load the the Firefox browser and paste the following URL:
 
     ```
     http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/

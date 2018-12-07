@@ -321,7 +321,7 @@ Test tutorial
 
     ![](images/img31.png)
 
-- Ensure that kubectl is working
+- Ensure that kubectl is working. Wait for all pods to be in a **Running** state, with the exception of the **corends** pods
 
     ```
     kubectl get pods -o wide --all-namespaces
@@ -337,7 +337,7 @@ Test tutorial
 
     ![](images/img33.png)
 
-- Now that the flannel network is install, you shoudl see that the **coredns...** pods are now in a **running** status
+- Now that the flannel network is install, you shoudl see that the **coredns...** pods are now in a **running** status. You'll need to re-run the command below multiple times until everything restarts.
 
     ```
     kubectl get pods -o wide --all-namespaces
@@ -457,5 +457,11 @@ Test tutorial
     ```
 
     ![](images/img103.png)
+
+- Access from the browser
+
+    ![](images/img223.png)
+
+
 
 

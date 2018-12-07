@@ -13,67 +13,58 @@ Test tutorial
 
 ### **Step 1**: Create a Virtual Box **kmaster** node/image
 
-- Load VMWare Fusion, click on **+** sign, and select **New**
+- Load VirtualBox and click on **New**
 
-    ![](images/img200.png)
+    ![](images/img02.png)
 
-- Drag
+- Enter the following, and click on **Commit**:
+    - Name: `kubernetes`
+    - Type: `Linux`
+    - Version: `Ubuntu (64-bit)`
+    - Hard disk: **Create a virtual hard disk now**
 
-    ![](images/img201.png)
+    ![](images/img03.png)
 
-- Select and continue
+- Enter the following Disk Information and click on **Commit**
+    - File Location: `kmaster`
+    - File Size: `30GB`
+    - Hard disk file type: `VDI (VirtualBox Disk Image)
 
-    ![](images/img202.png)
+    ![](images/img04.png)
 
-- uncheck - contineu
+- With **kmaster** selected, click on **settings**
 
-    ![](images/img203.png)
+    ![](images/img05.png)
 
-- Take the default **Legacy BIOS** on the **Choose Firmware Type** and click on **Continue**
+- Update the System Settings:
+    - Select **System** and **Processor**
+    - Set the number of CPUs to at least `2`
 
-- Click on the **Customize Settings** Button
+    ![](images/img06.png)
 
-    ![](images/img205.png)
+- Add a second network
+    - Click on **Network** and **Adapter 2** in the tool bar
+    - Click on **Enable Network Adapter**
+    - For Attached to, select **Host-only Adapter**
+    - Click on **OK**
 
-- Use the default **Save As** file name, and click on **Save**
+    ![](images/img07.png)
 
-    ![](images/img206.png)
+- Attach the Ubuntu ISO
+    - Click on the **Storage** menu option
+    - Click on the **Empty** icon below the IDE Controller
+    - Click on the **Optical Drive** CD Icon
+    - Select **Choose Virtual Optical Disk Drive** from the drop down menu
 
-- Click on the **General** setting icon
+    ![](images/img08.png)
 
-    ![](images/img207.png)
+- Navigate to and select the ubuntu iso you downloaded. Click on **OK**
 
-- Change the name to `kmaster` and click on **Show All** to return to the main menu
+    ![](images/img09.png)
 
-    ![](images/img208.png)
+- Click on **Start** to start the kmaster image
 
-- From the main menu select **Processors & Memory**, set the Processors to at least **2 processor cores** and then select **4GB** of RAM. Return to the main menu by click on **Show All**
-
-    ![](images/img209.png)
-
-- From the main menu click on **Add Device**
-
-    ![](images/img210.png)
-
-- Select **Network Adapter** and click on **Add**
-
-    ![](images/img211.png)
-
-- Scroll to the **Custom** networks, and select **Private to my ...** network. return to the main menu
-
-    ![](images/img212.png)
-
-- Select **Hard Disk** from the main menu
-
-    ![](images/img213.png)
-
-- Setting the **Disk Size** to **30GB**, click on **Apply** and return to the main menu
-
-    ![](images/img214.png)
-
-- Click on the **Play** icon to start the VM
-
-    ![](images/img215.png)
+    ![](images/img10.png)
 
 ### **Step 2**: Install Ubuntu
 
@@ -105,23 +96,6 @@ Test tutorial
 
 - When prompted with **Please remove the installation medium, then press ENTER:**, press the **Enter Key** in the image. Note: you can generally just press enter, as VBox will have automatically removed the ubuntu ISO during the installation process. If not, you can remove it using the **Settings**
 
-- Once the Image has started, **Right Click** on the desktop and Open a **Terminal Window**
-
-    ![](images/img216.png)
-
-- In the terminal window, install the VMWare Tools. Enter your password if prompted, and also enter **Y** if asked to continue
-
-    ```
-    sudo apt install open-vm-tools-desktop
-    ```
-
-- Enter **reboot** to restart the image
-
-    ```
-    reboot
-    ```
-
-    ![](images/img217.png)
 
 ### **Step 3**: Create a **knode** Ubuntu image
 
@@ -131,7 +105,22 @@ Test tutorial
 
 - You should now have both the **kmaster** and **knode** images running:
 
-    ![](images/img218.png)
+    ![](images/img15.png)
+
+    ![](images/img16.png)
+
+- If is a good idea to install the VBox tools
+
+    ![](images/img37.png)
+
+    ![](images/img38.png)
+
+- Reboot your images for VBox tools to work
+
+- On both images, you may want to share the clipboard to allow for command copy and paste:
+
+    ![](images/img17.png)
+
 
 ### **Step 4**: Perform package installations on **BOTH** images
 

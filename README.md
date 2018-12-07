@@ -281,9 +281,10 @@ Test tutorial
 
 ### **Step 6**: Configure Kubernetes Master - Run **ONLY on kmaster** image
 
-- Start the kubernetes cluster. **Note**: We will be using a Flannel network, so we are using 10.244.0.0/16 for the pod-network-cidr. **Replace \<ip-address-of-kmaster-vm\>** with your kmaster's host address. In our example that is 192.168.99.100
+- As sudo, start the kubernetes cluster. **Note**: We will be using a Flannel network, so we are using 10.244.0.0/16 for the pod-network-cidr. **Replace \<ip-address-of-kmaster-vm\>** with your kmaster's host address. In our example that is 192.168.99.100
 
     ```
+    sudo su
     kubeadm init --apiserver-advertise-address=<ip-address-of-kmaster-vm> --pod-network-cidr=10.244.0.0/16
     ```
 
@@ -426,7 +427,7 @@ Test tutorial
     ```
     curl -I <IP ADDRESS>
     ```
-    
+
     ![](images/img103.png)
 
 

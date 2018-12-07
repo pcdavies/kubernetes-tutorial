@@ -268,6 +268,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - As sudo, run the following command to install kubernetes
 
     ```
+    sudo su
     apt-get update && apt-get install -y apt-transport-https curl
 
     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
@@ -299,7 +300,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 
     ![](images/img26.png)
 
-### **Step 6**: Configure Kubernetes Master - Run **ONLY on kmaster** image
+### **Step 8**: Configure Kubernetes Master - Run **ONLY on kmaster** image
 
 - As sudo, start the kubernetes cluster. **Note**: We will be using a Flannel network, so we are using 10.244.0.0/16 for the pod-network-cidr. **Replace \<ip-address-of-kmaster-vm\>** with your kmaster's host address.
 
@@ -334,7 +335,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 
     ![](images/img32.png)
 
-### ***Step 7***: Install the Flannel Network
+### ***Step 9***: Install the Flannel Network
 
 - Notice that not all pods are working. We will resolve this by installing the pod network. In our example we are going to use a **Flannel** network. 
 
@@ -412,7 +413,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 
     ![](images/img43.png)
 
-### **Step 8**: Join knode to the kmaster
+### **Step 10**: Join knode to the kmaster
 
 - On the **knode** image impen a **terminal** window and run the following command:
     
@@ -422,7 +423,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
     kubeadm join 192.168.99.100:6443 --token 7f8vt2.axlyzylzkj6m66cq --discovery-token-ca-cert-hash sha256:6d6ef81f7053fafdef1c585c1ab27f7bc1de389b756cfead18587b81f6abaf25
     ```
     
-### **Step 9**: Install a test application
+### **Step 11**: Install a test application
 
 - Return to a terminal window on the **kmaster** image and run the following command. Wait until **knode** shows a **Ready** state
 

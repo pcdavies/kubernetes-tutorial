@@ -136,7 +136,7 @@ Test tutorial
     - At the bottom of the file, enter this line:
 
     ```
-    $USER ALL=(ALL) NOPASSWD:ALL
+    kubeuser ALL=(ALL) NOPASSWD:ALL
     ```
 
     ![](images/img46.png)
@@ -219,6 +219,7 @@ Test tutorial
 - As sudo, install open ssh server
 
     ```
+    sudo su
     apt-get install openssh-server
     ```
 
@@ -232,6 +233,11 @@ Test tutorial
     sudo su
     apt-get update
     apt-get install -y docker.io
+    ```
+
+- Enable to docker service
+
+    ```
     systemctl enable docker.service
     ```
 
@@ -334,6 +340,8 @@ Test tutorial
 
     ![](images/img36.png)
 
+- Open another terminal
+
     ```
     kubectl create serviceaccount dashboard -n default
     ```
@@ -399,7 +407,26 @@ Test tutorial
 
     ```
     kubectl get pods -o wide --all-namespaces
+    ```
+
+- Wait for the image to show running
+
+    ![](images/img101.png)
+
+- Get the service info
+
+    ```
     kubectl get service
     ```
 
-    ![](images/img45.png)
+    ![](images/img102.png)
+
+- Run curl command using ip from get service command
+
+    ```
+    curl -I <IP ADDRESS>
+    ```
+    
+    ![](images/img103.png)
+
+

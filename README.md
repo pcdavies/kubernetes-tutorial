@@ -198,19 +198,19 @@ Test tutorial
 
     In my example, here is **KMASTER**:
 
-    ![](images/img22.png)
+    ![](images/img219.png)
 
     Here is **KNODE**:
 
-    ![](images/img23.png)
+    ![](images/img220.png)
 
-- As sudo, set the host file in both images to reference the **kmaster** and **knode** ip addresses
+- As sudo, set the host file in ***both images*** to reference the **kmaster** and **knode** ip addresses
 
     ```
     nano /etc/hosts
     ```
 
-    ![](images/img24.png)
+    ![](images/img221.png)
 
 - ADD NOTE ABOUT NOW TO ADD THE /etc/network/interfaces update
 
@@ -220,12 +220,12 @@ Test tutorial
 
 - Change the file
     ```
-    auto enp0s8
-    iface enp0s8 inet static
-    address 192.168.99.100
+    auto ens34
+    iface ens34 inet static
+    address 192.168.198.135
     ```
 
-### Reboot Servers
+    ![](images/img222.png)
 
 - As sudo, install open ssh server
 
@@ -252,7 +252,11 @@ Test tutorial
     systemctl enable docker.service
     ```
 
-### **Step 6**: Install Kubernetes on **BOTH** images
+### **Step 6**: Reboot Servers
+
+- Not a bad idea to take another snapshot
+
+### **Step 7**: Install Kubernetes on **BOTH** images
 
 - As sudo, run the following command to install kubernetes
 

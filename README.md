@@ -302,11 +302,11 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 
 ### **Step 8**: Configure Kubernetes Master - Run **ONLY on kmaster** image
 
-- As sudo, start the kubernetes cluster. **Note**: We will be using a Flannel network, so we are using 10.244.0.0/16 for the pod-network-cidr. **Replace \<ip-address-of-kmaster-vm\>** with your kmaster's host address.
+- As sudo, start the kubernetes cluster. **Note**: We will be using a Flannel network, so we are using 10.244.0.0/16 for the pod-network-cidr, and this address does not need to be changed. However, **Replace** the text (`REPLACE-WITH-kmaster-IPADDRESS`) with your kmaster's host address.
 
     ```
     sudo su
-    kubeadm init --apiserver-advertise-address=<ip-address-of-kmaster-vm> --pod-network-cidr=10.244.0.0/16
+    kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=REPLACE-WITH-kmaster-IPADDRESS
     ```
 
     ![](images/img27.png)
@@ -419,9 +419,12 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
     
     ```
     sudo su
-    < use the kubeadmin join command you coppied earlier for example: >
-    kubeadm join 192.168.99.100:6443 --token 7f8vt2.axlyzylzkj6m66cq --discovery-token-ca-cert-hash sha256:6d6ef81f7053fafdef1c585c1ab27f7bc1de389b756cfead18587b81f6abaf25
     ```
+
+ - Use the **kubeadmin join** command you saved earlier to join **knode** to **kmaster**
+
+    ![](images/img224.png)
+
     
 ### **Step 11**: Install a test application
 

@@ -1,7 +1,8 @@
 # kubernetes-tutorial
-Test tutorial
+In this tutorial we will install 2 VM Images. One will server as the Kubernetes master, and the other a Kubernetes Node. We'll configure Docker and Kubernetes on both Images. 
 
-## Install the Master and Minion 
+## Install the Master and Node 
+
 ### Download Ubuntu 18.0.4 Desktop ISO
 
 - From this URL [Ubuntu Destop Downloads](https://www.ubuntu.com/download/desktop), get the iso image
@@ -13,33 +14,35 @@ Test tutorial
 
 ### **Step 1**: Create a Virtual Box **kmaster** node/image
 
+The following steps use VMWare Fusion, but using the concepts displayed below, you can make these examples work with VMWare workstation and VirtualBox.
+
 - Load VMWare Fusion, click on **+** sign, and select **New**
 
     ![](images/img200.png)
 
-- Drag
+- Drag the iso image you downloaded, and drop it onto the Install window  
 
     ![](images/img201.png)
 
-- Select and continue
+- Select the iso you just added, and click on **Continue**
 
     ![](images/img202.png)
 
-- uncheck - contineu
+- Uncheck the **Use Easy Install** option, and click on Continue
 
     ![](images/img203.png)
 
-- Take the default **Legacy BIOS** on the **Choose Firmware Type** and click on **Continue**
+- Take the default **Legacy BIOS** option on the **Choose Firmware Type**, and click on **Continue**
 
 - Click on the **Customize Settings** Button
 
     ![](images/img205.png)
 
-- Use the default **Save As** file name, and click on **Save**
+- Use the default **Save As** File Name, and click on **Save**
 
     ![](images/img206.png)
 
-- Click on the **General** setting icon
+- Click on the **General** setting icon in the main dashboard
 
     ![](images/img207.png)
 
@@ -103,7 +106,7 @@ Test tutorial
 
 - When prompted, click on **Restart Now**
 
-- When prompted with **Please remove the installation medium, then press ENTER:**, press the **Enter Key** in the image. Note: you can generally just press enter, as VBox will have automatically removed the ubuntu ISO during the installation process. If not, you can remove it using the **Settings**
+- When prompted with **Please remove the installation medium, then press ENTER:**, press the **Enter Key** in the image. Note: you can generally just press enter, as VBox will have automatically remove the ubuntu ISO during the installation process. If not, you can remove it using the **Settings**
 
 - Once the Image has started, **Right Click** on the desktop and Open a **Terminal Window**
 
@@ -163,7 +166,7 @@ Test tutorial
 
     ![](images/img18.png)
 
-- Kubernetes will throw errors if the swap space is not turned off. The following commands will turn swap off (Still as sudo user):
+- Kubernetes will throw errors if the swap space is not turned off. The following commands will turn swap off (These commands are also run as sudo user):
 
     ```
     swapoff -a
@@ -212,13 +215,13 @@ Test tutorial
 
     ![](images/img221.png)
 
-- ADD NOTE ABOUT NOW TO ADD THE /etc/network/interfaces update
+- To use the IPs assigned your image as Staic IPs, edit the /etc/network/interfaces file
 
     ```
     sudo nano /etc/network/interfaces
     ```
 
-- Change the file
+- Add the entry below to the bottom of the file, but change the **Network Name (ens34)** and the **IP Address 192.168.198.135** to match what you recorded using the **ifconfig** command
     ```
     auto ens34
     iface ens34 inet static
@@ -227,7 +230,7 @@ Test tutorial
 
     ![](images/img222.png)
 
-- As sudo, install open ssh server
+- As sudo, install open ssh server. This will allow you to connect to the Images from your host.
 
     ```
     sudo su
@@ -254,7 +257,11 @@ Test tutorial
 
 ### **Step 6**: Reboot Servers
 
-- Not a bad idea to take another snapshot
+- Reboot your **Images** by entering the `reboot` command in the terminal window. If desired, you could also snapshot the image. 
+
+    ```
+    reboot
+    ```
 
 ### **Step 7**: Install Kubernetes on **BOTH** images
 
@@ -292,11 +299,9 @@ Test tutorial
 
     ![](images/img26.png)
 
-- At this point, I'd recommend shuting down each image, taking a snapshot, and restarting
-
 ### **Step 6**: Configure Kubernetes Master - Run **ONLY on kmaster** image
 
-- As sudo, start the kubernetes cluster. **Note**: We will be using a Flannel network, so we are using 10.244.0.0/16 for the pod-network-cidr. **Replace \<ip-address-of-kmaster-vm\>** with your kmaster's host address. In our example that is 192.168.99.100
+- As sudo, start the kubernetes cluster. **Note**: We will be using a Flannel network, so we are using 10.244.0.0/16 for the pod-network-cidr. **Replace \<ip-address-of-kmaster-vm\>** with your kmaster's host address.
 
     ```
     sudo su
@@ -329,6 +334,8 @@ Test tutorial
 
     ![](images/img32.png)
 
+### ***Step 7***: Install the Flannel Network
+
 - Notice that not all pods are working. We will resolve this by installing the pod network. In our example we are going to use a **Flannel** network. 
 
     ```
@@ -358,13 +365,15 @@ Test tutorial
 
     ![](images/img47.png)
 
+- Run the proxy command so we can access the Kubernetes Dashboard
+
     ```
     kubectl proxy
     ```
 
     ![](images/img36.png)
 
-- Open another terminal
+- Open another terminal and create a Service Account
 
     ```
     kubectl create serviceaccount dashboard -n default
@@ -380,27 +389,32 @@ Test tutorial
 
     ![](images/img40.png)
 
+- Get the Secrect and save it for later use
+
     ```
     kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
     ```
 
+
     ![](images/img41.png)
 
-- enter URL on browser:
+- Load the brower window, and enter the following URL:
 
     ```
     http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
     ```
 
+- Select the **Token** option, and enter the Secret you just created
+
     ![](images/img42.png)
+
+- Click on the **Save** button to save the token
 
     ![](images/img43.png)
 
-- Holder
+### **Step 8**: Join knode to the kmaster
 
-### **Step xxx**: Join other image
-
-- Holder
+- On the **knode** image impen a **terminal** window and run the following command:
     
     ```
     sudo su
@@ -408,9 +422,9 @@ Test tutorial
     kubeadm join 192.168.99.100:6443 --token 7f8vt2.axlyzylzkj6m66cq --discovery-token-ca-cert-hash sha256:6d6ef81f7053fafdef1c585c1ab27f7bc1de389b756cfead18587b81f6abaf25
     ```
     
-### back on the master
+### **Step 9**: Install a test application
 
-- Holder
+- Return to a terminal window on the **kmaster** image and run the following command. Wait until **knode** shows a **Ready** state
 
     ```
     kubectl get nodes
@@ -418,21 +432,19 @@ Test tutorial
 
     ![](images/img44.png)
 
-### Install a pod
-
-- Holder
+- Run the following command to install the **nginx** server pod
 
     ```
     kubectl run --image=nginx nginx-server --port=80 --env="DOMAIN=cluster"
     ```
 
-- run until ready
+- Execute the following command to see the nginx-server
 
     ```
     kubectl get pods -o wide --all-namespaces
     ```
 
-- Wait for the image to show running
+- Wait for the nginx to show running
 
     ![](images/img101.png)
 

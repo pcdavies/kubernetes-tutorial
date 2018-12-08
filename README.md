@@ -115,13 +115,13 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - In the terminal window, install the VMWare Tools. Enter your password if prompted, and also enter **Y** if asked to continue
 
     ```
-    sudo apt install open-vm-tools-desktop
+    $ sudo apt install open-vm-tools-desktop
     ```
 
 - Enter **reboot** to restart the image
 
     ```
-    reboot
+    $ reboot
     ```
 
     ![](images/img217.png)
@@ -144,7 +144,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
     - From your terminal window enter:
 
     ```
-    sudo visudo
+    $ sudo visudo
     ```
 
     - At the bottom of the file, enter this line:
@@ -160,8 +160,8 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Login as 'sudo' and run the following commands :
 
     ```
-    sudo su
-    apt-get update
+    $ sudo su
+    # apt-get update
     ```
 
     ![](images/img18.png)
@@ -169,8 +169,8 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Kubernetes will throw errors if the swap space is not turned off. The following commands will turn swap off (These commands are also run as sudo user):
 
     ```
-    swapoff -a
-    nano /etc/fstab
+    # swapoff -a
+    # nano /etc/fstab
     ```
 
 - Comment out the line that references the **swapfile**. Then hit **Ctrl+X**, press **Y** and hit **Enter** to save the file.
@@ -180,7 +180,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - As sudo, check to ensure that the host file contains `kmaster` and `knode` on the respective images
 
     ```
-    nano /etc/hostname
+    # nano /etc/hostname
     ```
 
     ![](images/img20.png)
@@ -188,7 +188,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - As sudo, install net-tools
 
     ```
-    apt-get install net-tools
+    # apt-get install net-tools
     ```
 
     ![](images/img21.png)
@@ -196,7 +196,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - As sudo, on each image run ifconfig, and note the **network name and ip address** for the Host only network adapter for both kmaster and knode
 
     ```
-    ifconfig
+    # ifconfig
     ```
 
     In my example, here is **KMASTER**:
@@ -210,7 +210,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - As sudo, set the host file in ***both images*** to reference the **kmaster** and **knode** ip addresses
 
     ```
-    nano /etc/hosts
+    # nano /etc/hosts
     ```
 
     ![](images/img221.png)
@@ -218,7 +218,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - To use the IPs assigned your image as Staic IPs, edit the /etc/network/interfaces file
 
     ```
-    sudo nano /etc/network/interfaces
+    # nano /etc/network/interfaces
     ```
 
 - Add the entry below to the bottom of the file, but change the **Network Name (ens34)** and the **IP Address 192.168.198.135** to match what you recorded using the **ifconfig** command
@@ -233,8 +233,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - As sudo, install open ssh server. This will allow you to connect to the Images from your host.
 
     ```
-    sudo su
-    apt-get install openssh-server
+    # apt-get install openssh-server
     ```
 
     ![](images/img25.png)
@@ -244,15 +243,14 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - As sudo, run the following commands to install docker
 
     ```
-    sudo su
-    apt-get update
-    apt-get install -y docker.io
+    # apt-get update
+    # apt-get install -y docker.io
     ```
 
 - Enable to docker service
 
     ```
-    systemctl enable docker.service
+    # systemctl enable docker.service
     ```
 
 ### **Step 6**: Reboot Servers
@@ -260,7 +258,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Reboot your **Images** by entering the `reboot` command in the terminal window. If desired, you could also snapshot the image. 
 
     ```
-    reboot
+    # reboot
     ```
 
 ### **Step 7**: Install Kubernetes on **BOTH** images
@@ -268,28 +266,37 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - As sudo, run the following command to install kubernetes
 
     ```
-    sudo su
-    apt-get update && apt-get install -y apt-transport-https curl
+    $ sudo su
+    ```
 
-    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+    ```
+    # apt-get update && apt-get install -y apt-transport-https curl
+    ```
 
-    cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+    ```
+    # curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+    ```
+
+    ```
+    # cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
     deb http://apt.kubernetes.io/ kubernetes-xenial main
     EOF
+    ```
 
-    apt-get update
+    ```
+    # apt-get update
     ```
 
 - As sudo, install **Kubelet, kubeadmn, and kubectl**
 
     ```
-    apt-get install -y kubelet kubeadm kubectl 
+    # apt-get install -y kubelet kubeadm kubectl 
     ```
 
 - Update the Kubernetes config file
 
     ```
-    nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    # nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
     ```
 
 - Add the following **Environment** entry to the config file
@@ -305,8 +312,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - As sudo, start the kubernetes cluster. **Note**: We will be using a Flannel network, so we are using 10.244.0.0/16 for the pod-network-cidr, and this address does not need to be changed. However, **Replace** the text (`REPLACE-WITH-kmaster-IPADDRESS`) with your kmaster's host address.
 
     ```
-    sudo su
-    kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=REPLACE-WITH-kmaster-IPADDRESS
+    # kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=REPLACE-WITH-kmaster-IPADDRESS
     ```
 
     ![](images/img27.png)
@@ -315,14 +321,15 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 
     ![](images/img28.png)
 
-- You will **NOT** run the next command from the sudo user **#** promot, so ensure that you exit the sudo user and the **$** prompt is visible
+- You will **NOT** run the next command from the sudo user **#** prompt, so ensure that you exit the sudo user and the **$** prompt is visible
 
     ![](images/img30.png)
 
     ```
-    mkdir -p $HOME/.kube
-    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+    # exit
+    $ mkdir -p $HOME/.kube
+    $ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    $ sudo chown $(id -u):$(id -g) $HOME/.kube/config
     ```
 
     ![](images/img31.png)
@@ -330,7 +337,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Ensure that kubectl is working. Wait for all pods to be in a **Running** state, with the exception of the **corends** pods
 
     ```
-    kubectl get pods -o wide --all-namespaces
+    $ kubectl get pods -o wide --all-namespaces
     ```
 
     ![](images/img32.png)
@@ -340,7 +347,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Notice that not all pods are working. We will resolve this by installing the pod network. In our example we are going to use a **Flannel** network. 
 
     ```
-    kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+    $ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
     ```
 
     ![](images/img33.png)
@@ -348,20 +355,20 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Now that the flannel network is installed, you should see that the **coredns...** pods are now in a **running** status. You'll need to re-run the command below multiple times until everything restarts.
 
     ```
-    kubectl get pods -o wide --all-namespaces
+    $ kubectl get pods -o wide --all-namespaces
     ```
 
     ![](images/img34.png)
 
     ```
-    kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+    $ kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
     ```
     ![](images/img35.png)
 
 - Wait for the kube dashboard to show a **Running** state
 
     ```
-    kubectl get pods -o wide --all-namespaces
+    $ kubectl get pods -o wide --all-namespaces
     ```
 
     ![](images/img47.png)
@@ -369,7 +376,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Run the proxy command so we can access the Kubernetes Dashboard
 
     ```
-    kubectl proxy
+    $ kubectl proxy
     ```
 
     ![](images/img36.png)
@@ -377,13 +384,13 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Open another terminal and create a Service Account
 
     ```
-    kubectl create serviceaccount dashboard -n default
+    $ kubectl create serviceaccount dashboard -n default
     ```
 
     ![](images/img39.png)
 
     ```
-    kubectl create clusterrolebinding dashboard-admin -n default \
+    $ kubectl create clusterrolebinding dashboard-admin -n default \
     --clusterrole=cluster-admin \
     --serviceaccount=default:dashboard
     ```
@@ -393,13 +400,12 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Get the Secrect and save it for later use
 
     ```
-    kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
+    $ kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
     ```
-
 
     ![](images/img41.png)
 
-- Load the the Firefox browser and paste the following URL:
+- Load the the Firefox browser and go to the following URL:
 
     ```
     http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
@@ -418,7 +424,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - On the **knode** image impen a **terminal** window and run the following command:
     
     ```
-    sudo su
+    $ sudo su
     ```
 
  - Use the **kubeadmin join** command you saved earlier to join **knode** to **kmaster**
@@ -431,7 +437,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Return to a terminal window on the **kmaster** image and run the following command. Wait until **knode** shows a **Ready** state
 
     ```
-    kubectl get nodes
+    $ kubectl get nodes
     ```
 
     ![](images/img44.png)
@@ -439,13 +445,13 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Run the following command to install the **nginx** server pod
 
     ```
-    kubectl run --image=nginx nginx-server --port=80 --env="DOMAIN=cluster"
+    $ kubectl run --image=nginx nginx-server --port=80 --env="DOMAIN=cluster"
     ```
 
 - Execute the following command to see the nginx-server
 
     ```
-    kubectl get pods -o wide --all-namespaces
+    $ kubectl get pods -o wide --all-namespaces
     ```
 
 - Wait for the nginx to show running
@@ -455,13 +461,13 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Expose the port
 
     ```
-    kubectl expose deployment nginx-server --port=80 --name=nginx-http
+    $ kubectl expose deployment nginx-server --port=80 --name=nginx-http
     ```
 
 - Get the service info
 
     ```
-    kubectl get service
+    $ kubectl get service
     ```
 
     ![](images/img102.png)
@@ -469,7 +475,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 - Run curl command using ip from get service command
 
     ```
-    curl -I <IP ADDRESS>
+    $ curl -I <IP ADDRESS>
     ```
 
     ![](images/img103.png)

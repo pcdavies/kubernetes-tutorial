@@ -32,6 +32,8 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
     # vi /etc/fstab
     ```
 
+- Make sure your network connect is on - use Network Setting console
+
 - Turn off the firewall
 
     ```
@@ -43,7 +45,12 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
 
     ```
     # modprobe br_netfilter
+    ```
+
+    ```
     # echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+    # cat /proc/sys/net/bridge/bridge-nf-call-iptables
     ```
 
 - Make permanent but editing sysctl.conf
@@ -58,6 +65,8 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
     net.bridge.bridge-nf-call-ip6tables = 1
     net.bridge.bridge-nf-call-iptables = 1
     ```
+
+-   Possible shutdown and close k8master to k8node
 
 - edit the host file in both images and add entries for `k8master` and `k8node`
 

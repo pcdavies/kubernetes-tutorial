@@ -15,7 +15,7 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
  - set hostnames to `k8master` and `k8node` - use: 
  
     ```
-    sudo set-hostname k8master
+    sudo hostnamectl set-hostname k8master
     ``` 
 
 - Turn off Swap

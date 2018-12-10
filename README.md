@@ -421,6 +421,8 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 
 ### **Step 10**: Join knode to the kmaster
 
+***Note:*** The following step's command must be run only on the "Node"
+
 - On the **knode** image impen a **terminal** window and run the following command:
     
     ```
@@ -433,6 +435,8 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 
     
 ### **Step 11**: Install a test application
+
+***Note:*** The commands in this step are run on the "Master"
 
 - Return to a terminal window on the **kmaster** image and run the following command. Wait until **knode** shows a **Ready** state
 

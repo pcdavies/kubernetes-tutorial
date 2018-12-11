@@ -1,6 +1,8 @@
 # Istio Install and Config
 
-### **Step 1**: Download and install
+***Note:*** Istio can be installed from anywhere that has Helm, Kubectl and access to the cluster. For this example, connect into the **kmaster** image and run the install from that image. Istio will be installed onto the **knode** in the cluster
+
+### **Step 1**: On the **kmaster** image Download and install
 
 - Instructions below are found on the [Istio Website](https://istio.io/docs/)
 

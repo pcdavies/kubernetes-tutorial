@@ -32,7 +32,7 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
     # vi /etc/fstab
     ```
 
-- Make sure your network connect is on - use Network Setting console
+- Make sure your network connect is on - use **Network Setting console**
 
 - Turn off the firewall
 
@@ -136,8 +136,7 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
     $ kubectl get pods -o wide --all-namespaces
     ```
 
-- Go to **Step 9** in the README.md file and continue with the Flannel install
-
+- Return the [README.md](./README.md) to complete the Kubernetes install
 
 
 

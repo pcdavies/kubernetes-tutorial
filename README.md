@@ -17,6 +17,6 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
 
 ### **Step 3**: Istio Install and Config
 
-
+- [Istio Config](./Istio.md) and Sample App Install
 
 

@@ -53,20 +53,20 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
     # cat /proc/sys/net/bridge/bridge-nf-call-iptables
     ```
 
-- Make permanent but editing sysctl.conf
+- Make permanent but editing sysctl.conf and causing br_netfilter to load
 
     ```
-    # vi /etc/sysctl.conf
+    # echo 'br_netfilter' > /etc/modules-load.d/br_netfilter.conf
     ```
 
-- Add this to the bottom of the file and save:
-
     ```
+    # cat <<EOF >> /etc/sysctl.conf
     net.bridge.bridge-nf-call-ip6tables = 1
     net.bridge.bridge-nf-call-iptables = 1
+    EOF
     ```
 
--   Possible shutdown and close k8master to k8node
+-   Possible shutdown and close k8master to k8node. Make sure all setting have taken effect after rebooting
 
 - edit the host file in both images and add entries for `k8master` and `k8node`
 

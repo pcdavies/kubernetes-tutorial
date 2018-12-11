@@ -119,3 +119,10 @@
     ```
     $ kubectl apply -f samples/bookinfo/networking/destination-rule-all-mtls.yaml
     ```
+- Wait a minute or two
+
+- See if it works in your browser. Use the URL provided in `$GATEWAY_URL` and append `/productpage` - For example:
+
+    ```
+    http://192.168.168.171:31380/productpage
+    ```

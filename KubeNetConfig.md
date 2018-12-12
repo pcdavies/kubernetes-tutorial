@@ -2,6 +2,8 @@
 
 ### ***Step 1***: Install the Flannel Network
 
+***Note:*** the commands in the steps are to be run on the **kmaster** image
+
 - Notice that not all pods are working. We will resolve this by installing the pod network. In our example we are going to use a **Flannel** network. 
 
     ```
@@ -79,7 +81,7 @@
 
 ### **Step 2**: Join knode to the kmaster
 
-***Note:*** The following step's command must be run only on the "Node"
+***Note:*** The commands in the steps are to be run on the **knode** image
 
 - On the **knode** image impen a **terminal** window and run the following command:
     
@@ -94,7 +96,7 @@
     
 ### **Step 3**: Install a test application
 
-***Note:*** The commands in this step are run on the "Master"
+***Note:*** the commands in the steps are to be run on the **kmaster** image
 
 - Return to a terminal window on the **kmaster** image and run the following command. Wait until **knode** shows a **Ready** state
 

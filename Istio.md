@@ -142,3 +142,29 @@
     ```
     http://192.168.168.171:31380/productpage
     ```
+
+### **Step 5**: How to undeploy the Booking Application
+
+- Display what will be removed
+
+    ```
+    kubectl get virtualservices
+    kubectl get destinationrules
+    kubectl get gateway
+    kubectl get pods
+    ```
+
+- Run the script to delete the services - ***Run from istio directory***
+
+    ```
+    samples/bookinfo/platform/kube/cleanup.sh
+    ```
+
+- Make sure everythign was removed
+
+    ```
+    kubectl get virtualservices   #-- there should be no virtual services
+    kubectl get destinationrules  #-- there should be no destination rules
+    kubectl get gateway           #-- there should be no gateway
+    kubectl get pods               #-- the Bookinfo pods should be deleted
+    ```

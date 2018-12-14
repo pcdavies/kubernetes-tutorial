@@ -123,20 +123,21 @@
     echo $GATEWAY_URL
     ```
 
-- Test the application - you should see are **200** return code
+- Wait until all pods are **Running**
 
-    Run all commands a the **$** prompt:
-    ```
-    curl -o /dev/null -s -w "%{http_code}\n" http://${GATEWAY_URL}/productpage
-    ```
 - Add destination Rules
 
     Run all commands a the **$** prompt:
     ```
     kubectl apply -f samples/bookinfo/networking/destination-rule-all-mtls.yaml
     ```
-- Wait a minute or two
+- Test the application - you should see are **200** return code
 
+    Run all commands a the **$** prompt:
+    ```
+    curl -o /dev/null -s -w "%{http_code}\n" http://${GATEWAY_URL}/productpage
+    ```
+    
 - See if it works in your browser. Use the URL provided in `$GATEWAY_URL` and append `/productpage` - For example:
 
     ```

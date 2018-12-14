@@ -31,7 +31,7 @@
 - Download and install client from a script
 
     Run all commands a the **$** prompt:
-   ```
+    ```
     curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh
 
     chmod 700 get_helm.sh
@@ -52,7 +52,7 @@
 - Install using the manifest
 
     Run all commands a the **$** prompt:
-   ```
+    ```
     kubectl create namespace istio-system
 
     kubectl apply -f $HOME/istio.yaml

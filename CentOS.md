@@ -20,47 +20,51 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
 
 - Turn off Swap
 
+    Run commands as `sudo su` at the **#** prompt
     ```
-    # setenforce 0
-    # sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
-    # swapoff -a
+    setenforce 0
+
+    sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+    swapoff -a
     ```
 
 - Comment out the swap in fstab 
 
+    Run commands as `sudo su` at the **#** prompt
+
     ```
-    # vi /etc/fstab
+    vi /etc/fstab
     ```
 
 - Make sure your network connect is on - use **Network Setting console**
 
 - Turn off the firewall
 
+    Run commands as `sudo su` at the **#** prompt
     ```
-    # systemctl stop firewalld
-    # systemctl disable firewalld
+    systemctl stop firewalld
+    systemctl disable firewalld
     ```
 
 - Allow Bridge/internet access over nat
 
+    Run commands as `sudo su` at the **#** prompt
     ```
-    # modprobe br_netfilter
-    ```
+    modprobe br_netfilter
+ 
+    echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
 
-    ```
-    # echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
-
-    # cat /proc/sys/net/bridge/bridge-nf-call-iptables
+    cat /proc/sys/net/bridge/bridge-nf-call-iptables
     ```
 
 - Make permanent but editing sysctl.conf and causing br_netfilter to load
 
+    Run commands as `sudo su` at the **#** prompt
     ```
-    # echo 'br_netfilter' > /etc/modules-load.d/br_netfilter.conf
-    ```
-
-    ```
-    # cat <<EOF >> /etc/sysctl.conf
+    echo 'br_netfilter' > /etc/modules-load.d/br_netfilter.conf
+ 
+    cat <<EOF >> /etc/sysctl.conf
     net.bridge.bridge-nf-call-ip6tables = 1
     net.bridge.bridge-nf-call-iptables = 1
     EOF
@@ -70,14 +74,16 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
 
 - edit the host file in both images and add entries for `k8master` and `k8node`
 
+    Run commands as `sudo su` at the **#** prompt
     ```
-    # vi /etc/hosts
+    vi /etc/hosts
     ```
 
 - Setup yum to install kubernetes:
 
+    Run commands as `sudo su` at the **#** prompt
     ```
-    # cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+    cat <<EOF > /etc/yum.repos.d/kubernetes.repo
     [kubernetes]
     name=Kubernetes
     baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
@@ -87,25 +93,29 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
     gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
         https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
     EOF
+
     ```
 
 - Run yum to install kubernetes and docker:
 
+    Run commands as `sudo su` at the **#** prompt
     ```
-    # yum install -y kubelet kubeadm kubectl docker -y
+    yum install -y kubelet kubeadm kubectl docker -y
     ```
 
 - Update the kubernetes config file:
 
+    Run commands as `sudo su` at the **#** prompt
     ```
-    # sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
     ```
 
 - Enable docker and kubernetes
 
+    Run commands as `sudo su` at the **#** prompt
     ```
-    # systemctl enable docker && systemctl enable kubelet
-    # systemctl start docker && systemctl start kubelet
+    systemctl enable docker && systemctl enable kubelet
+    systemctl start docker && systemctl start kubelet
     ```
 
 - ***Reboot***
@@ -114,26 +124,34 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
 
 - Setup Kubernetes
 
+    Run commands as `sudo su` at the **#** prompt
     ```
-    $ sudo su
-    # kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=REPLACE-WITH-YOUR-IP-ADDRESS
+    kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=REPLACE-WITH-YOUR-IP-ADDRESS
     ```
 
 - **Copy the Join** message and store locall for later use
 
 - Exit to **$** / kubeuser / non sudo user
 
+    If connected as `sudo`, exit to the **$** prompt
     ```
-    # exit
-    $ mkdir -p $HOME/.kube
-    $ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-    $ sudo chown $(id -u):$(id -g) $HOME/.kube/config
+    exit
+
+    $  # you shoud be here....
+    ```
+
+    Run commands as `kubeuser` at the **$** prompt
+    ```
+    mkdir -p $HOME/.kube
+    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
     ```
 
 - Wait for all to load
 
+    Run commands as `kubeuser` at the **$** prompt
     ```
-    $ kubectl get pods -o wide --all-namespaces
+    kubectl get pods -o wide --all-namespaces
     ```
 
 - Return the [README.md](./README.md) to complete the Kubernetes install

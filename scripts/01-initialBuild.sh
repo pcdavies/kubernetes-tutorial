@@ -2,9 +2,9 @@
 
 echo 'Create Sample App pods and services in the cluster'
 
-cat /home/pcdavies/istio-1.0.4/samples/bookinfo/platform/kube/bookinfo.yaml
+cat ~/istio-1.0.4/samples/bookinfo/platform/kube/bookinfo.yaml
 
-kubectl apply -f /home/pcdavies/istio-1.0.4/samples/bookinfo/platform/kube/bookinfo.yaml
+kubectl apply -f ~/istio-1.0.4/samples/bookinfo/platform/kube/bookinfo.yaml
 
 kubectl get pods
 kubectl get services
@@ -18,16 +18,16 @@ done
 
 echo 'Create the Service Gateway'
 
-kubectl apply -f /home/pcdavies/istio-1.0.4/samples/bookinfo/networking/bookinfo-gateway.yaml
+kubectl apply -f ~/istio-1.0.4/samples/bookinfo/networking/bookinfo-gateway.yaml
 sleep 4
 
 kubectl get gateways
 
 echo 'Create routing rules to access all version'
 
-cat /home/pcdavies/istio-1.0.4/samples/bookinfo/networking/destination-rule-all-mtls.yaml
+cat ~/istio-1.0.4/samples/bookinfo/networking/destination-rule-all-mtls.yaml
 
-kubectl apply -f /home/pcdavies/istio-1.0.4/samples/bookinfo/networking/destination-rule-all-mtls.yaml
+kubectl apply -f ~/istio-1.0.4/samples/bookinfo/networking/destination-rule-all-mtls.yaml
 sleep 4
 
 export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')

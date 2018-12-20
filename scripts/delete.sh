@@ -58,3 +58,5 @@ while [ $(kubectl get pods | grep -E 'ratings|reviews|productpage|NAME' | wc -l)
   echo 'Sleeping until deleted...'
   sleep 8
 done
+
+kubectl get pods

@@ -49,7 +49,12 @@ sleep 5
 
 echo 'Check to see if all removed:'
 
-kubectl get pods
 kubectl get virtualservices
 kubectl get destinationrules
 kubectl get gateway
+kubectl get pods
+while [ $(kubectl get pods | grep -E 'ratings|reviews|productpage|NAME' | wc -l) -gt 1 ]; do
+  kubectl get pods
+  echo 'Sleeping until deleted...'
+  sleep 4
+done

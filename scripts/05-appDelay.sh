@@ -1,6 +1,6 @@
 #!/bin/bash
 
-kubectl apply -f /home/pcdavies/istio-1.0.4/samples/bookinfo/networking/virtual-service-all-v1.yaml
+kubectl apply -f ~/istio-1.0.4/samples/bookinfo/networking/virtual-service-all-v1.yaml
 
 echo 'Route to v2 where there is a 2 second delay'
 

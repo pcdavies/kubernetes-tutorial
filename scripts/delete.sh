@@ -56,5 +56,5 @@ kubectl get pods
 while [ $(kubectl get pods | grep -E 'ratings|reviews|productpage|NAME' | wc -l) -gt 1 ]; do
   kubectl get pods
   echo 'Sleeping until deleted...'
-  sleep 4
+  sleep 8
 done

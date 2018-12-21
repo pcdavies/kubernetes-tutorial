@@ -3,6 +3,8 @@ In this tutorial we will install 2 VM Images. One will server as the Kubernetes 
 
 ## Install the Master and Node 
 
+Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommended to set up a second network, and assign stattic IP addressed - e.g. 172.31.x.x
+
 ### Download and setup CentOS 7
  - Download the DVD ISO from [CentOS Download Center](https://www.centos.org/download/)
 

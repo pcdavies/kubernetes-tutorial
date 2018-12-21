@@ -1,6 +1,7 @@
 
+If you plan on including Windows nodes, you need to set up the Flannel Network and Proxy configuration differently. Choose the correct **Step 1** based on the desire to include Windows nodes.
 
-### ***Step 1***: Install the Flannel Network
+### ***Step 1***: With ***No Windows Nodes*** - Install the Flannel Network
 
 The following is to be performed on the **kmaster** image
 
@@ -11,6 +12,68 @@ The following is to be performed on the **kmaster** image
     ```
 
     ![](images/img33.png)
+
+- Go to **Step 2**
+
+### ***Step 1***: With ***Windows Nodes*** - Install the Flannel Network
+
+- Patch the linux kube-proxy DaemonSet to target Linux only. 
+
+    ```
+    $ kubectl get ds/kube-proxy -o go-template='{{.spec.updateStrategy.type}}{{"\n"}}' --namespace=kube-system
+    ```
+
+- Create this file
+
+    ```
+    nano node-selector-patch.yml
+    ```
+- Past the fillowing into the file, and save
+
+    ```
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            beta.kubernetes.io/os: linux
+    ```
+
+- Patch the damon set
+
+    ```
+    kubectl patch ds/kube-proxy --patch "$(cat node-selector-patch.yml)" -n=kube-system
+    ```
+
+- check on the patch
+
+    ```
+    kubectl get ds -n kube-system
+    ```
+
+    ![](images/img33.2.png)
+
+- Follow the instruction from here titled **Collecting Cluster Info**
+
+    ![Microsoft Doc](https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/creating-a-linux-master)
+
+- Get the recent Flannel Config file
+
+    ```
+    wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+    ```
+
+- Edit the file and change `vxlan` to `host-gw` and save the file
+
+    ![](images/img33.3.png)
+
+- Apply the flannel network
+
+    ```
+    kubectl apply -f kube-flannel.yml
+    ```
+
+### **Step 2**: Join knode to the kmaster
+
 
 - Now that the flannel network is installed, you should see that the **coredns...** pods are now in a **running** status. You'll need to re-run the command below multiple times until everything restarts.
 
@@ -79,7 +142,7 @@ The following is to be performed on the **kmaster** image
 
     ![](images/img43.png)
 
-### **Step 2**: Join knode to the kmaster
+### **Step 3**: Join knode **(Linux)** to the kmaster
 
 ***Note:*** The following step's command must be run only on the "Node"
 
@@ -93,8 +156,39 @@ The following is to be performed on the **kmaster** image
 
     ![](images/img224.png)
 
+### **Step 3**: Join knode **(Windows)** to kmaster
+
+- Follow these instructions **Joining the Windows Node**
+
+    ```
+    https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/joining-windows-workers
+    ```
+
+- Get Service Subnet/CIDR:
+
+    ```
+    kubectl cluster-info dump | grep -i service-cluster-ip-range
+    ```
+
+- Get Kube DNS
+
+    ```
+    kubectl get svc/kube-dns -n kube-system
+    ```
+
+- Using the correct Addresses discovered earlier, run this:
+
+    ```
+    cd c:\k
+.\start.ps1 -ManagementIP <Windows Node IP> -ClusterCIDR <Cluster CIDR> -ServiceCIDR <Service CIDR> -KubeDnsServiceIP <Kube-dns Service IP>
+    ```
+
+    ```
+    cd c:\k
+.\start.ps1 -ManagementIP 172.31.0.35:6443 -ClusterCIDR 10.244.0.0/16 -ServiceCIDR 10.96.0.0/12 -KubeDnsServiceIP 10.96.0.10
+    ```
     
-### **Step 3**: Install a test application
+### **Step 4**: Install a test application
 
 ***Note:*** The commands in this step are run on the "Master"
 

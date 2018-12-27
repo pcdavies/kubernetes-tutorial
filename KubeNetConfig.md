@@ -54,7 +54,7 @@ The following is to be performed on the **kmaster** image
 
 - Follow the instruction from here titled **Collecting Cluster Info**
 
-    ![Microsoft Doc](https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/creating-a-linux-master)
+    [Microsoft Doc](https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/creating-a-linux-master)
 
 - Get the recent Flannel Config file
 
@@ -72,6 +72,18 @@ The following is to be performed on the **kmaster** image
     kubectl apply -f kube-flannel.yml
     ```
 
+- Apply the patch to the Flannel Network
+
+    ```
+    kubectl patch ds/kube-flannel-ds-amd64 --patch "$(cat node-selector-patch.yml)" -n=kube-system
+    ```
+
+- check on the patch
+
+    ```
+    kubectl get ds -n kube-system
+    ```
+    
 ### **Step 2**: Join knode to the kmaster
 
 

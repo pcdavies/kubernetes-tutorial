@@ -145,16 +145,14 @@ while [ $(kubectl get pods | grep -E 'sleep|httpbin' | grep 'Running' | wc -l) -
 done
 
 
-sleep 5
-
 export SLEEP_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
 echo ' '
 echo 'Calling URL from pod 4 times - curl  http://httpbin:8080/headers....'
 # kubectl exec -it $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'
 
 echo ' '
 echo 'V1 Logs without mirroring:'
@@ -188,7 +186,6 @@ spec:
       subset: v2
 EOF
 
-sleep 5
 
 echo ' '
 export SLEEP_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
@@ -196,10 +193,10 @@ echo $SLEEP_POD
 
 echo ' '
 echo 'Calling URL from pod 4 times - curl  http://httpbin:8080/headers....'
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' 
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'
 
 echo ' '
 echo 'V1 Logs after mirroring:'

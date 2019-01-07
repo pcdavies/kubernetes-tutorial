@@ -28,6 +28,12 @@ function cleanup() {
   rm -f ${OUTPUT}
 }
 
+
+kubectl delete deployment httpbin-v1
+kubectl delete deployment httpbin-v2
+kubectl delete deployment sleep
+kubectl delete deployment nginx-server
+
 trap cleanup EXIT
 
 if [[ ${ret} -eq 0 ]];then
@@ -53,7 +59,7 @@ kubectl get virtualservices
 kubectl get destinationrules
 kubectl get gateway
 kubectl get pods
-while [ $(kubectl get pods | grep -E 'ratings|reviews|productpage|NAME' | wc -l) -gt 1 ]; do
+while [ $(kubectl get pods | grep -E 'ratings|reviews|productpage|httpbin|sleep|nginx-server|NAME' | wc -l) -gt 1 ]; do
   kubectl get pods
   echo 'Sleeping until deleted...'
   sleep 8

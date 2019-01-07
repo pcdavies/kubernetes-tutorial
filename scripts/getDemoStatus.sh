@@ -1,0 +1,20 @@
+echo ''
+echo 'Checking Virtual Services'
+kubectl get virtualservices
+
+echo ''
+echo 'Checking Distination Rules'
+kubectl get destinationrules
+
+echo ''
+echo 'Checking Gateways'
+kubectl get gateway
+
+echo ''
+echo 'Checking Pods'
+kubectl get pods -o wide
+
+echo ''
+echo 'Checking for 200 return code from URL'
+curl -o /dev/null -s -w "%{http_code}\n" http://${GATEWAY_URL}/productpage
+

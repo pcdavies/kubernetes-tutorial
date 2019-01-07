@@ -149,10 +149,10 @@ export SLEEP_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.na
 echo ' '
 echo 'Calling URL from pod 4 times - curl  http://httpbin:8080/headers....'
 # kubectl exec -it $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null 2>&1
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null 2>&1
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null 2>&1
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null 2>&1
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null
 
 echo ' '
 echo 'V1 Logs without mirroring:'
@@ -192,10 +192,10 @@ echo $SLEEP_POD
 
 echo ' '
 echo 'Calling URL from pod 4 times - curl  http://httpbin:8080/headers....'
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null 2>&1
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null 2>&1
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null 2>&1
-kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null 2>&1
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null
+kubectl exec $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'  > /dev/null
 
 echo ' '
 echo 'V1 Logs after mirroring:'

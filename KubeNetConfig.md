@@ -97,7 +97,8 @@ The following is to be performed on the **kmaster** image
     ![](images/img34.png)
 
     ```
-    $ kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+    $ kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
+
     ```
     ![](images/img35.png)
 

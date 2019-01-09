@@ -1,10 +1,15 @@
 #!/bin/bash
 
+if [ "$ISTIO_DIR" = "" ]; then
+    echo 'ISTIO_DIR environment is not set. Example: /home/kubeuser/istio-1.0.5'
+    exit
+fi
+
 echo 'Create Sample App pods and services in the cluster'
 
-cat ~/istio-1.0.4/samples/bookinfo/platform/kube/bookinfo.yaml
+cat $ISTIO_DIR/samples/bookinfo/platform/kube/bookinfo.yaml
 
-kubectl apply -f ~/istio-1.0.4/samples/bookinfo/platform/kube/bookinfo.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/platform/kube/bookinfo.yaml
 
 kubectl get pods
 kubectl get services
@@ -18,16 +23,16 @@ done
 
 echo 'Create the Service Gateway'
 
-kubectl apply -f ~/istio-1.0.4/samples/bookinfo/networking/bookinfo-gateway.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/bookinfo-gateway.yaml
 sleep 4
 
 kubectl get gateways
 
 echo 'Create routing rules to access all version'
 
-cat ~/istio-1.0.4/samples/bookinfo/networking/destination-rule-all-mtls.yaml
+cat $ISTIO_DIR/samples/bookinfo/networking/destination-rule-all-mtls.yaml
 
-kubectl apply -f ~/istio-1.0.4/samples/bookinfo/networking/destination-rule-all-mtls.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/destination-rule-all-mtls.yaml
 sleep 4
 
 export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')

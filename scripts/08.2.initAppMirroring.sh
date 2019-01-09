@@ -1,9 +1,14 @@
 #!/bin/bash
 
+if [ "$ISTIO_DIR" = "" ]; then
+    echo 'ISTIO_DIR environment is not set. Example: /home/kubeuser/istio-1.0.5'
+    exit
+fi
+
 
 echo 'Deploy httpbin-v1'
 
-cat <<EOF | ~/istio-1.0.4/bin/istioctl kube-inject -f - | kubectl create -f -
+cat <<EOF | $ISTIO_DIR/bin/istioctl kube-inject -f - | kubectl create -f -
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -28,7 +33,7 @@ EOF
 
 echo 'Deploy httpbin-v2'
 
-cat <<EOF | ~/istio-1.0.4/bin/istioctl kube-inject -f - | kubectl create -f -
+cat <<EOF | $ISTIO_DIR/bin/istioctl kube-inject -f - | kubectl create -f -
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -68,7 +73,7 @@ spec:
 EOF
 
 echo 'Create the sleep service'
-cat <<EOF | ~/istio-1.0.4/bin/istioctl kube-inject -f - | kubectl create -f -
+cat <<EOF | $ISTIO_DIR/bin/istioctl kube-inject -f - | kubectl create -f -
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:

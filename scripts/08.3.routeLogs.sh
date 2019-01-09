@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 kubectl describe virtualservice httpbin
 
 export SLEEP_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$ISTIO_DIR" = "" ]; then
+    echo 'ISTIO_DIR environment is not set. Example: /home/kubeuser/istio-1.0.5'
+    exit
+fi
+
 kubectl get virtualservices
 kubectl get destinationrules
 kubectl get gateway
@@ -7,8 +12,8 @@ kubectl get pods
 
 NAMESPACE=default
 
-export PATH=~/istio-1.0.4/bin:$PATH
-export SCRIPTDIR=~/istio-1.0.4/samples/bookinfo/platform/kube/
+export PATH=$ISTIO_DIR/bin:$PATH
+export SCRIPTDIR=$ISTIO_DIR/samples/bookinfo/platform/kube/
 
 echo "using NAMESPACE=${NAMESPACE}"
 

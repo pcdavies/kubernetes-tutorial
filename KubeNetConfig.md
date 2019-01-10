@@ -57,6 +57,18 @@ The following is to be performed on the **kmaster** image
 
     [Microsoft Doc](https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/creating-a-linux-master)
 
+- It is recommended to enable bridged IPv4 traffic to iptables chains when using Flannel. This can be done using the following command:
+
+    ```
+    sysctl net.bridge.bridge-nf-call-iptables
+    ```
+
+    if not set to 1
+
+    ```
+    sudo sysctl net.bridge.bridge-nf-call-iptables=1
+    ```
+
 - Get the recent Flannel Config file
 
     ```

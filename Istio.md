@@ -15,11 +15,11 @@
     cd ist*
     ```
 
-- Add the path of your current directory to your .bashrc, and source that file
+- Add the path of your current directory to your .bashrc, and source that file ***Note***: The version (e.g. 1.0.5) shown below might not be correct - you ***MUST*** set the right verion for your path
 
     Run all commands a the **$** prompt:
     ```
-    echo 'export PATH=/home/kubeuser/istio-1.0.4/bin:$PATH' >> ~/.bashrc
+    echo 'export PATH=/home/kubeuser/istio-1.0.5/bin:$PATH' >> ~/.bashrc
 
     . ~/.bashrc
 

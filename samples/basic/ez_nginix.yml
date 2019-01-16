@@ -17,6 +17,8 @@ spec:
        image: nginx:1.13.12
        ports:
        - containerPort: 80
+     nodeSelector:
+       beta.kubernetes.io/os: linux
 ---
 apiVersion: v1
 kind: Service

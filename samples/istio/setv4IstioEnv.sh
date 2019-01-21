@@ -1,1 +1,1 @@
-export ISTIO_DIR=/home/kubeuser/istio-1.0.4
+export ISTIO_DIR=$HOME/istio-1.0.4

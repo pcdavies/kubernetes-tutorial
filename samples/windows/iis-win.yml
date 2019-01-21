@@ -7,6 +7,10 @@ spec:
   selector:
     matchLabels:
       app: iis
+  tolerations:
+  - key: "opsys-taint"
+    operator: Equals
+    value: "windows"
   template:
     metadata:
       labels:

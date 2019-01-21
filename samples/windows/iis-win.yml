@@ -7,10 +7,6 @@ spec:
   selector:
     matchLabels:
       app: iis
-  tolerations:
-  - key: "opsys-taint"
-    operator: Equals
-    value: "windows"
   template:
     metadata:
       labels:
@@ -27,6 +23,10 @@ spec:
         - containerPort: 80
       nodeSelector:
         beta.kubernetes.io/os: windows
+      tolerations:
+      - key: "opsys-taint"
+        operator: Equal
+        value: "windows"
 ---
 apiVersion: v1
 kind: Service

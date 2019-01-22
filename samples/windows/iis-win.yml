@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: iis-deploy
+  namespace: windows
 spec:
   replicas: 1
   selector:
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
       - name: iis
-        image: microsoft/iis
+        image: mcr.microsoft.com/windows/servercore/iis:windowsservercore-ltsc2019
         resources:
           limits:
             memory: "128Mi"
@@ -34,7 +35,7 @@ metadata:
   labels:
     app: iis
   name: iis-svc
-  namespace: default
+  namespace: windows
 spec:
   type: NodePort
   ports:

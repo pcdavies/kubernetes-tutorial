@@ -1,0 +1,22 @@
+# Kubenetes
+alias kapods='kubectl get pods -o wide --all-namespaces'
+alias kpods='kubectl get pods -o wide'
+alias kwpods='kubectl get pods -o wide -n=windows'
+alias knodes='kubectl get nodes'
+alias ksvc='kubectl get services'
+alias kwsvc='kubectl get services -n=windows'
+alias kisvc='kubectl get services -n=istio-system'
+alias kasvc='kubectl get services --all-namespaces'
+alias kevents='kubectl get event --sort-by=.metadata.creationTimestamp'
+alias kaevents='kubectl get events --all-namespaces'
+alias kep='kubectl get endpoints'
+alias kdep='kubectl get deployments'
+
+alias kdesc='echo "kubectl describe pod/pod_name"'
+
+# docker
+alias dimages='sudo docker images'
+alias dps='sudo docker ps'
+alias daps='sudo docker ps --all'
+
+

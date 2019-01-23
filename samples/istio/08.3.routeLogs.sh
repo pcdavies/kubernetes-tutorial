@@ -24,7 +24,7 @@ echo 'Returned '"$CNT"' Records'
 echo ' '
 echo 'V2 Logs without mirroring:'
 export V2_POD=$(kubectl get pod -l app=httpbin,version=v2 -o jsonpath={.items..metadata.name})
-echo '$ kubectl logs '"$V1_POD"
+echo '$ kubectl logs '"$V2_POD"
 kubectl logs $V2_POD -c httpbin | grep GET
 CNT=$(kubectl logs $V2_POD -c httpbin | grep GET | wc -l)
 echo 'Returned '"$CNT"' Records'

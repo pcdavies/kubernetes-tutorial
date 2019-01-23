@@ -50,6 +50,13 @@ http://192.168.168.167:31380/productpage
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &
 http://localhost:9090/graph
 
+istio_requests_total{destination_service="productpage.default.svc.cluster.local"}
+istio_requests_total{destination_service="reviews.default.svc.cluster.local", destination_version="v3"}
+rate(istio_requests_total{destination_service=~"productpage.*", response_code="200"}[5m])
+
+
+
+
 # grafana
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
 
@@ -64,4 +71,11 @@ http://[::1]:16686
 
 
 
+# Service Graph
+helm template --set servicegraph.enabled=true install/kubernetes/helm/istio --name istio --namespace istio-system > $HOME/istio.yaml
+kubectl apply -f $HOME/istio.yaml
+
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=servicegraph -o jsonpath='{.items[0].metadata.name}') 8088:8088 &
+
+http://localhost:8088/force/forcegraph.html
 

@@ -2,6 +2,20 @@
 
 ***Note:*** Istio can be installed from anywhere that has Helm, Kubectl and access to the cluster. For this example, connect into the **kmaster** image and run the install from that image. Istio will be installed onto the **knode** in the cluster
 
+### **Step 0**: ***If running Windows*** on the cluster, follow instructions below:
+
+- Taint the windows node so that istio will not attempt to install on the Windows node. ***NOTE***: Replace the Node Name **UseYourWindowsNodeName** with the name of the windows node. Note: **NoSchedule** will not put pods on the node unless the Deployment is **Tolerant** to the **Taint**. **NoExecute** would try to remove anything on the node currently running. You can remove a taint the command: `kubectl taint nodes UseYourWindowsNodeName my-taint-`
+
+    ```
+    kubectl taint nodes UseYourWindowsNodeName opsys-taint=windows:NoSchedule
+    ```
+
+- We will also create a Namespace on which we will deploy thing that is meant to go on the Windows node. Although we will specify in the deployment when deploying on a Windows node, we are going to set up the **default** namespace to install a side-car with every deployment, and Windows does not support side-cars. 
+
+    ```
+    kubectl create namespace windows
+    ```
+
 ### **Step 1**: On the **kmaster** image Download and install
 
 - Instructions below are found on the [Istio Website](https://istio.io/docs/)
@@ -19,7 +33,7 @@
 
     Run all commands a the **$** prompt:
     ```
-    echo 'export PATH=/home/kubeuser/istio-1.0.5/bin:$PATH' >> ~/.bashrc
+    echo 'export PATH=$HOME/istio-1.0.5/bin:$PATH' >> ~/.bashrc
 
     . ~/.bashrc
 

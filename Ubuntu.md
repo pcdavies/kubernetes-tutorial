@@ -25,7 +25,7 @@ The following steps use VMWare Fusion, but using the concepts displayed below, y
 
 - Select the iso you just added, and click on **Continue**
 
-    ![](images/img202.png)
+    ![](images/img2025.png)
 
 - Uncheck the **Use Easy Install** option, and click on Continue
 

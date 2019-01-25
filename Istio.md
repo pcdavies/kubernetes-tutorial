@@ -183,3 +183,174 @@
     kubectl get gateway           #-- there should be no gateway
     kubectl get pods               #-- the Bookinfo pods should be deleted
     ```
+
+## Installing Monitoring Tools
+
+In these steps we will get Grafana, Tracing and Kiali running
+
+### ***Step 6***: install Grafana
+
+- Change to the ISTIO install director - e.g. `cd $HOME/istio-*`
+- Using helm, add grafana to the istio.yaml, and then apply that yaml file:
+
+    ```
+    helm template --set grafana.enabled=true install/kubernetes/helm/istio --name istio --namespace istio-system > $HOME/istio.yaml
+
+    kubectl apply -f $HOME/istio.yaml
+    ```
+
+- Look at the Pods and wait for **grafana-....** to show a running state
+
+    ```
+    kubectl get pods -n=istio-system
+    ```
+### ***Step 7***: install Tracing
+
+- Using helm add Tracing to the istio.yaml and apply
+
+    ```
+    helm template --set tracing.enabled=true install/kubernetes/helm/istio --name istio --namespace istio-system > $HOME/istio.yaml
+
+    kubectl apply -f $HOME/istio.yaml
+    ```
+
+- run get pods and look for **istio-tracing-....**
+
+    ```
+    kubectl get pods -n=istio-system
+    ```
+
+### ***Step 8***: Install Kiali
+
+- Populate environment variables with the username and password for Kiali
+
+    ```
+    KIALI_USERNAME=$(read -p 'Kiali Username: ' uval && echo -n $uval | base64)
+
+    KIALI_PASSPHRASE=$(read -sp 'Kiali Passphrase: ' pval && echo -n $pval | base64)
+    ```
+
+- Create the Secret
+
+    ```
+    cat <<EOF | kubectl apply -f -
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: kiali
+      namespace: $NAMESPACE
+      labels:
+        app: kiali
+    type: Opaque
+    data:
+      username: $KIALI_USERNAME
+      passphrase: $KIALI_PASSPHRASE
+    EOF
+
+    ```
+
+- Using helm add Kiali to the istio.yaml and apply
+
+    ```
+    helm template --set kiali.enabled=true install/kubernetes/helm/istio --name istio --namespace istio-system > $HOME/istio.yaml
+
+    kubectl apply -f $HOME/istio.yaml
+    ```
+
+- run get pods and look for **kiali....** and wait until it's **Running**
+
+    ```
+    kubectl get pods -n=istio-system
+    ```
+
+- Set some of the Kiali dashboard endpoints
+
+    ```
+    helm template \
+        --set kiali.enabled=true \
+        --set "kiali.dashboard.jaegerURL=http://$(kubectl get svc tracing -n=istio-system -o jsonpath='{.spec.clusterIP}'):80" \
+        --set "kiali.dashboard.grafanaURL=http://$(kubectl get svc grafana -n=istio-system -o jsonpath='{.spec.clusterIP}'):3000" \
+        install/kubernetes/helm/istio \
+        --name istio --namespace istio-system > $HOME/istio.yaml
+
+    kubectl apply -f $HOME/istio.yaml
+    ```
+
+### ***Step 9***: Install Service Graph
+
+- Using helm add Service Graph to the istio.yaml and apply
+
+    ```
+    helm template --set servicegraph.enabled=true install/kubernetes/helm/istio --name istio --namespace istio-system > $HOME/istio.yaml
+
+    kubectl apply -f $HOME/istio.yaml
+    ```
+
+- run get pods and look for **servicegraph-....**
+
+    ```
+    kubectl get pods -n=istio-system
+    ```
+
+### ***Step 10***: set up the port forwarding
+
+You will run this from a host on which you have kubectl running. Wait for all these deployed pods to show a running state 
+
+- Port forward Kiali
+
+    ```
+    kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001 &
+
+    ```
+
+- Port forward Grafana
+
+    ```
+    kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
+
+    ```
+
+- Port forward Prometheus (note: Prometheus was loaded with the intial install)
+
+    ```
+    kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &
+
+    ```
+
+- Port forward the Service Graph
+
+    ```
+    kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=servicegraph -o jsonpath='{.items[0].metadata.name}') 8088:8088 &
+    ```
+
+### URLs to access each of the applications:
+
+- Go to these URLs
+    ```
+    # Kiali
+
+    http://[::1]:20001
+
+    # Grafana
+
+    http://localhost:3000/d/1/istio-mesh-dashboard
+    http://localhost:3000/d/UbsSZTDik/istio-workload-dashboard
+
+    # Prometheus
+
+    http://localhost:9090/graph?g0.range_input=1h&g0.expr=istio_requests_total%7Bdestination_service%3D%22productpage.default.svc.cluster.local%22%7D&g0.tab=1
+
+    # Service Graph
+
+    http://localhost:8088/force/forcegraph.html
+
+    ```
+
+
+### ***Step 12***: Stop port forwarding
+
+- When ready to stop port forwarding, run the kill all command
+
+    ```
+    killall kubectl
+    ```

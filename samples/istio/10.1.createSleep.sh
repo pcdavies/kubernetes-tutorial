@@ -40,7 +40,7 @@ spec:
   location: MESH_EXTERNAL
 EOF
 
-echo 'kubectl cribe serviceentry httpbin-ext'
+echo 'kubectl describe serviceentry httpbin-ext'
 echo ' '
 kubectl describe serviceentry httpbin-ext
 echo ' '

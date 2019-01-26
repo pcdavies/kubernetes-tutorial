@@ -5,6 +5,7 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
+
 export SOURCE_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
 
 echo 'Connecting to pod....'

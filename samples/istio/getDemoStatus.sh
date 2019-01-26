@@ -7,6 +7,10 @@ echo 'Checking Distination Rules'
 kubectl get destinationrules
 
 echo ''
+echo 'Checking Service Entires'
+kubectl get serviceentries
+
+echo ''
 echo 'Checking Gateways'
 kubectl get gateway
 

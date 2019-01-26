@@ -17,7 +17,7 @@ export SCRIPTDIR=$ISTIO_DIR/samples/bookinfo/platform/kube/
 
 echo "using NAMESPACE=${NAMESPACE}"
 
-protos=( destinationrules virtualservices gateways )
+protos=( destinationrules virtualservices gateways serviceentries)
 for proto in "${protos[@]}"; do
   for resource in $(istioctl get -n ${NAMESPACE} $proto | awk 'NR>1{print $1}'); do
     istioctl delete -n ${NAMESPACE} $proto $resource;
@@ -64,7 +64,7 @@ kubectl get virtualservices
 kubectl get destinationrules
 kubectl get gateway
 kubectl get pods
-while [ $(kubectl get pods | grep -E 'ratings|reviews|productpage|httpbin|sleep|nginx-server|NAME' | wc -l) -gt 1 ]; do
+while [ $(kubectl get pods | grep -E 'ratings|reviews|productpage|httpbin|sleep|nginx-server|sleep|NAME' | wc -l) -gt 1 ]; do
   kubectl get pods
   echo 'Sleeping until deleted...'
   sleep 8

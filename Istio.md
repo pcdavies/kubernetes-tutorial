@@ -349,8 +349,8 @@ You will run this from a host on which you have kubectl running. Wait for all th
 
 ### ***Step 12***: Stop port forwarding
 
-- When ready to stop port forwarding, run the kill all command
+- When ready to stop port forwarding, run the killall command
 
     ```
-    killall kubectl
+    killall -v kubectl
     ```

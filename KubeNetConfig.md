@@ -208,10 +208,44 @@ The following is to be performed on the **kmaster** image
 
     ![](images/kubenetconfig/img44.png)
 
-- Run the following command to install the **nginx** server pod
+- Run the following command to deploy the **nginx** service and deployment
 
     ```
-    kubectl run --image=nginx nginx-server --port=80 --env="DOMAIN=cluster"
+    cat <<EOF | kubectl apply -f -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: nginx-server
+      namespace: default
+      labels:
+        app: nginx-server
+    spec:
+      ports:
+      - port: 80
+        name: http
+      selector:
+        app: nginx-server
+    ---
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      name: nginx-http
+      namespace: default
+    spec:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: nginx
+        spec:
+          containers:
+          - name: nginx-server
+            image: nginx
+            imagePullPolicy: IfNotPresent
+            ports:
+            - containerPort: 80
+    EOF
+    
     ```
 
 - Execute the following command to see the nginx-server

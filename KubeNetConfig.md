@@ -191,7 +191,7 @@ The following is to be performed on the **kmaster** image
     sudo su
     ```
 
- - Use the **kubeadmin join** command you saved earlier to join **knode** to **kmaster**
+ - Use the **kubeadm join** command you saved earlier to join **knode** to **kmaster**
 
     ![](images/kubenetconfig/img224.png)
     

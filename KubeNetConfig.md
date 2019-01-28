@@ -13,6 +13,9 @@ The following is to be performed on the **kmaster** image
     ```
     kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
     ```
+
+- Image
+
     ![](images/KubeNet/img33.png)
 
 - Go to **Step 2**

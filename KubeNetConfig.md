@@ -13,7 +13,6 @@ The following is to be performed on the **kmaster** image
     ```
     kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
     ```
-
     ![](images/KubeNet/img33.png)
 
 - Go to **Step 2**
@@ -243,3 +242,4 @@ The following is to be performed on the **kmaster** image
     ![](images/KubeNet/img223.png)
 
 - Return the [README.md](./README.md) to complete the Kubernetes install
+

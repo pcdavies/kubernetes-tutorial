@@ -15,7 +15,7 @@ The following is to be performed on the **kmaster** image
     $ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
     ```
 
-    ![](images/KubeNet/img33.png)
+    ![](images/kubenetconfig/img33.png)
 
 - Go to **Step 2**
 
@@ -56,7 +56,7 @@ The following is to be performed on the **kmaster** image
     kubectl get ds -n kube-system
     ```
 
-    ![](images/KubeNet/img33.2.png)
+    ![](images/kubenetconfig/img33.2.png)
 
 - Follow the instruction from here titled **Collecting Cluster Info** to identify some of the information needed later.
 
@@ -98,7 +98,7 @@ The following is to be performed on the **kmaster** image
     kubectl get pods -o wide --all-namespaces
     ```
 
-    ![](images/KubeNet/img33.5.png)
+    ![](images/kubenetconfig/img33.5.png)
 
 
 - Apply the patch to the Flannel Network - ***Note**: Ensure that you select the correct flannel pod for your system. In this example, I'm using **amd64**, but you migth use arm, arm64, ppc64le, s390x, etc.
@@ -113,7 +113,7 @@ The following is to be performed on the **kmaster** image
     kubectl get ds -n kube-system
     ```
 
-    ![](images/KubeNet/img33.6.png)
+    ![](images/kubenetconfig/img33.6.png)
 
 ## Dashboard Install
     
@@ -126,7 +126,7 @@ The following is to be performed on the **kmaster** image
     kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
 
     ```
-    ![](images/KubeNet/img35.png)
+    ![](images/kubenetconfig/img35.png)
 
 - Wait for the kube dashboard to show a **Running** state
 
@@ -134,7 +134,7 @@ The following is to be performed on the **kmaster** image
     kubectl get pods -o wide --all-namespaces
     ```
 
-    ![](images/KubeNet/img47.png)
+    ![](images/kubenetconfig/img47.png)
 
 - Open another terminal and create a Service Account
 
@@ -154,7 +154,7 @@ The following is to be performed on the **kmaster** image
     kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
     ```
 
-    ![](images/KubeNet/img41.png)
+    ![](images/kubenetconfig/img41.png)
 
 - Run the proxy command so we can access the Kubernetes Dashboard
 
@@ -170,11 +170,11 @@ The following is to be performed on the **kmaster** image
 
 - Select the **Token** option, and enter the Secret you just created
 
-    ![](images/KubeNet/img42.png)
+    ![](images/kubenetconfig/img42.png)
 
 - Click on the **Save** button to save the token
 
-    ![](images/KubeNet/img43.png)
+    ![](images/kubenetconfig/img43.png)
 
 ## Join the Node
 
@@ -190,7 +190,7 @@ The following is to be performed on the **kmaster** image
 
  - Use the **kubeadmin join** command you saved earlier to join **knode** to **kmaster**
 
-    ![](images/KubeNet/img224.png)
+    ![](images/kubenetconfig/img224.png)
     
 ### **Step 3**: Install a test application
 
@@ -203,7 +203,7 @@ The following is to be performed on the **kmaster** image
     kubectl get nodes
     ```
 
-    ![](images/KubeNet/img44.png)
+    ![](images/kubenetconfig/img44.png)
 
 - Run the following command to install the **nginx** server pod
 
@@ -219,7 +219,7 @@ The following is to be performed on the **kmaster** image
 
 - Wait for the nginx to show running
 
-    ![](images/KubeNet/img101.png)
+    ![](images/kubenetconfig/img101.png)
 
 - Expose the port
 
@@ -233,7 +233,7 @@ The following is to be performed on the **kmaster** image
     kubectl get service
     ```
 
-    ![](images/KubeNet/img102.png)
+    ![](images/kubenetconfig/img102.png)
 
 - Run curl command using ip from get service command
 
@@ -241,11 +241,11 @@ The following is to be performed on the **kmaster** image
     curl -I <IP ADDRESS>
     ```
 
-    ![](images/KubeNet/img103.png)
+    ![](images/kubenetconfig/img103.png)
 
 - Access from the browser
 
-    ![](images/KubeNet/img223.png)
+    ![](images/kubenetconfig/img223.png)
 
 - Return the [README.md](./README.md) to complete the Kubernetes install
 

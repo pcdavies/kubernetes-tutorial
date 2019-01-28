@@ -218,6 +218,12 @@
     kubectl taint nodes knodew opsys-taint=windows:NoSchedule
     ```
 
+- Get information about the Node, and you'll see the **Taint**
+
+    ```
+    kubectl describe node knodew
+    ```
+
 - Pull the following image down to the Windows node, as it will be used shortly
 
     ```

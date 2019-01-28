@@ -2,20 +2,6 @@
 
 ***Note:*** Istio can be installed from anywhere that has Helm, Kubectl and access to the cluster. For this example, connect into the **kmaster** image and run the install from that image. Istio will be installed onto the **knode1** Node
 
-### **Step 0**: ***If running Windows*** on the cluster, follow instructions below:
-
-- Taint the windows node so that istio will not attempt to install on the Windows node. ***NOTE***: Replace the Node Name **UseYourWindowsNodeName** with the name of the windows node. Note: **NoSchedule** will not put pods on the node unless the Deployment is **Tolerant** to the **Taint**. **NoExecute** would try to remove anything on the node currently running. You can remove a taint the command: `kubectl taint nodes UseYourWindowsNodeName my-taint-`
-
-    ```
-    kubectl taint nodes UseYourWindowsNodeName opsys-taint=windows:NoSchedule
-    ```
-
-- We will also create a Namespace on which we will deploy thing that is meant to go on the Windows node. Although we will specify in the deployment when deploying on a Windows node, we are going to set up the **default** namespace to install a side-car with every deployment, and Windows does not support side-cars. 
-
-    ```
-    kubectl create namespace windows
-    ```
-
 ### **Step 1**: On the **kmaster** image Download and install
 
 - Instructions below are found on the [Istio Website](https://istio.io/docs/)
@@ -85,7 +71,7 @@
 
 ### **Step 4**: Deploy the booking application
 
-- The instructions can be found [Here](https://istio.io/docs/examples/bookinfo/)
+- The instructions summarized below can be found [Here](https://istio.io/docs/examples/bookinfo/)
 
 - Since "Automatic Sidecar Injection" is possible, use this option
 
@@ -155,7 +141,7 @@
 - See if it works in your browser. Use the URL provided in `$GATEWAY_URL` and append `/productpage` - For example:
 
     ```
-    http://192.168.168.171:31380/productpage
+    http://<The Host $GATEWAY_URL>/productpage
     ```
 
 ### **Step 5**: How to undeploy the Booking Application
@@ -188,9 +174,9 @@
 
 In these steps we will get Grafana, Tracing and Kiali running
 
-### ***Step 6***: install Grafana
+### **Step 6**: install Grafana
 
-- Change to the ISTIO install director - e.g. `cd $HOME/istio-*`
+- If not already there, change to the ISTIO install director - e.g. `cd $HOME/istio-*`
 - Using helm, add grafana to the istio.yaml, and then apply that yaml file:
 
     ```
@@ -204,7 +190,7 @@ In these steps we will get Grafana, Tracing and Kiali running
     ```
     kubectl get pods -n=istio-system
     ```
-### ***Step 7***: install Tracing
+### **Step 7**: install Tracing
 
 - Using helm add Tracing to the istio.yaml and apply
 
@@ -220,13 +206,19 @@ In these steps we will get Grafana, Tracing and Kiali running
     kubectl get pods -n=istio-system
     ```
 
-### ***Step 8***: Install Kiali
+### **Step 8**: Install Kiali
 
-- Populate environment variables with the username and password for Kiali
+- Populate environment variables with the username and password for Kiali.
+
+- First get the username:
 
     ```
     KIALI_USERNAME=$(read -p 'Kiali Username: ' uval && echo -n $uval | base64)
+    ```
 
+- Now get the password:
+
+    ```
     KIALI_PASSPHRASE=$(read -sp 'Kiali Passphrase: ' pval && echo -n $pval | base64)
     ```
 
@@ -276,7 +268,7 @@ In these steps we will get Grafana, Tracing and Kiali running
     kubectl apply -f $HOME/istio.yaml
     ```
 
-### ***Step 9***: Install Service Graph
+### **Step 9**: Install Service Graph
 
 - Using helm add Service Graph to the istio.yaml and apply
 
@@ -292,7 +284,7 @@ In these steps we will get Grafana, Tracing and Kiali running
     kubectl get pods -n=istio-system
     ```
 
-### ***Step 10***: set up the port forwarding
+### **Step 10**: set up the port forwarding
 
 You will run this from a host on which you have kubectl running. Wait for all these deployed pods to show a running state 
 
@@ -315,17 +307,20 @@ You will run this from a host on which you have kubectl running. Wait for all th
     ```
     kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &
 
+
     ```
 
 - Port forward the Service Graph
 
     ```
     kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=servicegraph -o jsonpath='{.items[0].metadata.name}') 8088:8088 &
+
     ```
 
 ### URLs to access each of the applications:
 
-- Go to these URLs
+- Go to these URLs on a browser running on the **kmaster** image. You can also run it on your local **Host** browser, but you'd first need to configure kubectl to run from the host accessing the cluster.
+
     ```
     # Kiali
 
@@ -346,8 +341,44 @@ You will run this from a host on which you have kubectl running. Wait for all th
 
     ```
 
+### **Step 11**: Install git and Demo Scripts
 
-### ***Step 12***: Stop port forwarding
+- Install git on `kmaster`
+
+    ```
+    sudo yum install git
+    ```
+
+- Create a directory to place the examples
+
+    ```
+    mkdir ~/repos
+    ```
+
+- Change to the directory and clone the git repository
+
+    ```
+    cd ~/repos
+
+    git clone https://github.com/pcdavies/kubernetes-tutorial.git
+
+    ```
+
+- Change to the directory where the Istio demo scripts are located. Note: all of the examples are taken from the [Istio Booking Application Documentation](https://istio.io/docs/examples/bookinfo/)
+
+    ```
+    cd ~/repos/kubernetes-tutorial/samples/istio
+
+    ls -la
+
+    . setv5IstioEnv.env
+
+    ```
+
+- More details to follow on running each example
+
+
+### **Step 12**: Stop port forwarding
 
 - When ready to stop port forwarding, run the killall command
 

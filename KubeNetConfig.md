@@ -103,7 +103,7 @@ The following is to be performed on the **kmaster** image
     ![](images/kubenetconfig/img33.5.png)
 
 
-- Apply the patch to the Flannel Network - ***Note**: Ensure that you select the correct flannel pod for your system. In this example, I'm using **amd64**, but you migth use arm, arm64, ppc64le, s390x, etc.
+- Apply the patch to the Flannel Network - ***Note**: Ensure that you select the correct flannel pod for your system. In this example, I'm using **amd64**, but you might use arm, arm64, ppc64le, s390x, etc.
 
     ```
     kubectl patch ds/kube-flannel-ds-amd64 --patch "$(cat node-selector-patch.yml)" -n=kube-system
@@ -191,7 +191,7 @@ The following is to be performed on the **kmaster** image
     sudo su
     ```
 
- - Use the **kubeadmin join** command you saved earlier to join **knode** to **kmaster**
+ - Use the **kubeadm join** command you saved earlier to join **knode** to **kmaster**
 
     ![](images/kubenetconfig/img224.png)
     

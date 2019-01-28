@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: curl2win
+  namespace: windows
+  labels:
+    app: curl2win
+spec:
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: curl2win
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: curl2win
+  namespace: windows
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: curl2win
+    spec:
+      containers:
+      - name: curl2win
+        image: pstauffer/curl
+        command: ["/bin/sleep", "3650d"]
+        imagePullPolicy: IfNotPresent
+---

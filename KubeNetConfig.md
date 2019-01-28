@@ -7,15 +7,12 @@ If you plan on including Windows nodes, you need to set up the Flannel Network a
 
 The following is to be performed on the **kmaster** image
 
-- Notice that not all pods are working. We will resolve this by installing the pod network. In our example we are going to use a **Flannel** network. 
+- Notice that not all pods are working. We will resolve this by installing the pod network. In our example we are going to use a **Flannel** network. Run commands as `kubeuser` at the **$** prompt
 
-    Run commands as `kubeuser` at the **$** prompt
     ```
     kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
     ```
-
-- Image
-
+    
     ![](images/KubeNet/img33.png)
 
 - Go to **Step 2**

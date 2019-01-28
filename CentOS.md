@@ -65,11 +65,11 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
     vi /etc/fstab
     ```
 
-     ![](images/CentOS/img030.png)
+    ![](images/CentOS/img030.png)
 
 - Make sure your network connect is on - use **Network Setting console**
 
-     ![](images/CentOS/img032.png)
+    ![](images/CentOS/img032.png)
 
 - Turn off the firewall
 

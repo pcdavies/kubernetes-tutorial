@@ -1,4 +1,6 @@
 
+# Setup Kubernetes
+
 If you plan on including Windows nodes, you need to set up the Flannel Network and Proxy configuration differently. Choose the correct **Step 1** based on the desire to include Windows nodes.
 
 ### ***Step 1***: With ***No Windows Nodes*** - Install the Flannel Network
@@ -12,11 +14,11 @@ The following is to be performed on the **kmaster** image
     kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
     ```
 
-    ![](images/img33.png)
+    ![](images/KubeNet/img33.png)
 
 - Go to **Step 2**
 
-### ***Step 1***: With ***Windows Nodes*** - Install the Flannel Network
+### ***Step 1***: With the potential of having a ***Windows Node(s)*** - Install the Flannel Network as follows:
 
 - Patch the linux kube-proxy DaemonSet to target Linux only. 
 
@@ -53,9 +55,9 @@ The following is to be performed on the **kmaster** image
     kubectl get ds -n kube-system
     ```
 
-    ![](images/img33.2.png)
+    ![](images/KubeNet/img33.2.png)
 
-- Follow the instruction from here titled **Collecting Cluster Info**
+- Follow the instruction from here titled **Collecting Cluster Info** to identify some of the information needed later.
 
     [Microsoft Doc](https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/creating-a-linux-master)
 
@@ -71,21 +73,32 @@ The following is to be performed on the **kmaster** image
     sudo sysctl net.bridge.bridge-nf-call-iptables=1
     ```
 
-- Get the recent Flannel Config file
+- Download the recent Flannel Config file
 
     ```
     wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
     ```
 
-- Edit the file and change `vxlan` to `host-gw` and save the file
+- Run the following **sed** command to change `vxlan` to `host-gw` in the **kube-flannel.yml** file
 
-    ![](images/img33.3.png)
+    ```
+    sed 's/vxlan/host-gw/' -i kube-flannel.yml
+    ```
 
 - Apply the flannel network
 
     ```
     kubectl apply -f kube-flannel.yml
     ```
+
+- View the pods and wait for the **coredns** pods to show running
+
+    ```
+    kubectl get pods -o wide --all-namespaces
+    ```
+
+    ![](images/KubeNet/img33.5.png)
+
 
 - Apply the patch to the Flannel Network - ***Note**: Ensure that you select the correct flannel pod for your system. In this example, I'm using **amd64**, but you migth use arm, arm64, ppc64le, s390x, etc.
 
@@ -98,24 +111,19 @@ The following is to be performed on the **kmaster** image
     ```
     kubectl get ds -n kube-system
     ```
+
+    ![](images/KubeNet/img33.6.png)
     
-### **Step 2**: Join knode to the kmaster
+### **Step 2**: Install the Dashboard
 
+- We are going to install the Dashboard Pod prior to joining a node. this will cause the Dashboard to be installed on the Master Node, which is a good practice. Run the following command to install the Dashboard
 
-- Now that the flannel network is installed, you should see that the **coredns...** pods are now in a **running** status. You'll need to re-run the command below multiple times until everything restarts.
-
-    Run commands as `kubeuser` at the **$** prompt
-    ```
-    kubectl get pods -o wide --all-namespaces
-    ```
-
-    ![](images/img34.png)
 
     ```
     kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
 
     ```
-    ![](images/img35.png)
+    ![](images/KubeNet/img35.png)
 
 - Wait for the kube dashboard to show a **Running** state
 
@@ -123,15 +131,7 @@ The following is to be performed on the **kmaster** image
     kubectl get pods -o wide --all-namespaces
     ```
 
-    ![](images/img47.png)
-
-- Run the proxy command so we can access the Kubernetes Dashboard
-
-    ```
-    kubectl proxy
-    ```
-
-    ![](images/img36.png)
+    ![](images/KubeNet/img47.png)
 
 - Open another terminal and create a Service Account
 
@@ -139,23 +139,25 @@ The following is to be performed on the **kmaster** image
     kubectl create serviceaccount dashboard -n default
     ```
 
-    ![](images/img39.png)
-
     ```
     kubectl create clusterrolebinding dashboard-admin -n default \
     --clusterrole=cluster-admin \
     --serviceaccount=default:dashboard
     ```
 
-    ![](images/img40.png)
-
-- Get the Secrect and save it for later use
+- Get the Secrect and save it for later use. Note, you can always recoved this credential by re-running the command below.
 
     ```
     kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
     ```
 
-    ![](images/img41.png)
+    ![](images/KubeNet/img41.png)
+
+- Run the proxy command so we can access the Kubernetes Dashboard
+
+    ```
+    kubectl proxy
+    ```
 
 - Load the the Firefox browser and go to the following URL:
 
@@ -165,13 +167,13 @@ The following is to be performed on the **kmaster** image
 
 - Select the **Token** option, and enter the Secret you just created
 
-    ![](images/img42.png)
+    ![](images/KubeNet/img42.png)
 
 - Click on the **Save** button to save the token
 
-    ![](images/img43.png)
+    ![](images/KubeNet/img43.png)
 
-### **Step 3**: Join knode **(Linux)** to the kmaster
+### **Step 3**: Join the knode1 **(Linux)** node to the kmaster
 
 ***Note:*** The following step's command must be run only on the "Node"
 
@@ -183,54 +185,20 @@ The following is to be performed on the **kmaster** image
 
  - Use the **kubeadmin join** command you saved earlier to join **knode** to **kmaster**
 
-    ![](images/img224.png)
-
-### **Step 3**: Join knode **(Windows)** to kmaster
-
-- Follow these instructions **Joining the Windows Node**
-
-    ```
-    https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/joining-windows-workers
-    ```
-
-- Get Service Subnet/CIDR:
-
-    ```
-    kubectl cluster-info dump | grep -i service-cluster-ip-range
-    ```
-
-- Get Kube DNS
-
-    ```
-    kubectl get svc/kube-dns -n kube-system
-    ```
-
-- Using the correct Addresses discovered earlier, run this:
-
-    ```
-    cd c:\k
+    ![](images/KubeNet/img224.png)
     
-    .\start.ps1 -ManagementIP <Windows Node IP> -ClusterCIDR <Cluster CIDR> -ServiceCIDR <Service CIDR> -KubeDnsServiceIP <Kube-dns Service IP>
-    ```
-
-    ```
-    cd c:\k
-    
-    .\start.ps1 -ManagementIP 172.31.0.35:6443 -ClusterCIDR 10.244.0.0/16 -ServiceCIDR 10.96.0.0/12 -KubeDnsServiceIP 10.96.0.10
-    ```
-    
-### **Step 4**: Install a test application
+### **Step 3**: Install a test application
 
 ***Note:*** The commands in this step are run on the "Master"
 
-- Return to a terminal window on the **kmaster** image and run the following command. Wait until **knode** shows a **Ready** state
+- Return to a terminal window on the **kmaster** image and run the following command. Wait until **knode1** shows a **Ready** state
 
     Run commands as `kubeuser` at the **$** prompt
     ```
     kubectl get nodes
     ```
 
-    ![](images/img44.png)
+    ![](images/KubeNet/img44.png)
 
 - Run the following command to install the **nginx** server pod
 
@@ -246,7 +214,7 @@ The following is to be performed on the **kmaster** image
 
 - Wait for the nginx to show running
 
-    ![](images/img101.png)
+    ![](images/KubeNet/img101.png)
 
 - Expose the port
 
@@ -260,7 +228,7 @@ The following is to be performed on the **kmaster** image
     kubectl get service
     ```
 
-    ![](images/img102.png)
+    ![](images/KubeNet/img102.png)
 
 - Run curl command using ip from get service command
 
@@ -268,10 +236,10 @@ The following is to be performed on the **kmaster** image
     curl -I <IP ADDRESS>
     ```
 
-    ![](images/img103.png)
+    ![](images/KubeNet/img103.png)
 
 - Access from the browser
 
-    ![](images/img223.png)
+    ![](images/KubeNet/img223.png)
 
 - Return the [README.md](./README.md) to complete the Kubernetes install

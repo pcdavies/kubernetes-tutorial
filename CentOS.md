@@ -1,5 +1,6 @@
 # kubernetes-tutorial
-In this tutorial we will install 2 VM Images. One will server as the Kubernetes master, and the other a Kubernetes Node. We'll configure Docker and Kubernetes on both Images. We'll then optionally configure a Windows node and connect it to the cluseter.
+
+In this tutorial we will install 2 VM Images. One will server as the Kubernetes master, and the other a Kubernetes Worker Node. We'll configure Docker and Kubernetes on both Images. 
 
 ## Install the Master and Node 
 
@@ -10,40 +11,108 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 
  - Create a `kmaster` and `knode1`
 
- - The following screenshots will show an example of configuring the Master node using VMWare Fusion. After creating the Master Node, you can follow the same pattern to create the Worker Node. 
+ - The following screenshots will show an example of configuring the Master node using VMWare Fusion. After creating the Master Node, you can follow the same pattern to create the Worker Node.
+
+ - Create a new virtual image 
 
      ![](images/CentOS/img001.png)
+
+- Drag and drop the CentOS ISO  on the install dialog, and then select that ISO
+
      ![](images/CentOS/img002.png)
+
+- Continue
+
      ![](images/CentOS/img003.png)
+
+- Select the **Customize Settings** option
+
      ![](images/CentOS/img004.png)
+
+- Save the virtual machine as `kmaster.vmwarevm`
+
      ![](images/CentOS/img005.png)
+
+- Select **Processors & Memory**
+
      ![](images/CentOS/img006.png)
+
+- Set the Processors to **2 processor cores** and increase the memory. Since my host has plent of RAM, I increased the setting to **4+GB**, but you can use slightly less
+
      ![](images/CentOS/img007.png)
+
+- Increase the amount of diskspace to aproximately 30GB
+
      ![](images/CentOS/img008.png)
+
+- Press enter to start the install
+
      ![](images/CentOS/img009.png)
+
+- Set the language
+
      ![](images/CentOS/img010.png)
+
+- Click on Sofware Selection
+
      ![](images/CentOS/img011.png)
+
+- Choose **Gnome** and **System and Administration Tools**
+
      ![](images/CentOS/img012.png)
+
+- Select the Installation desitnation
+
      ![](images/CentOS/img013.png)
+
+- Click on Done
+
      ![](images/CentOS/img014.png)
+
+- Select the **Network and Host Name**
+
      ![](images/CentOS/img015.1.png)
+
+- Ensure that the connection is **ON** and set the **Host Name** to `kmaster`
+
      ![](images/CentOS/img015.2.png)
+
+- Click on **Begin Installation**
+
      ![](images/CentOS/img015.3.png)
+
+- Click on **Root Password**
+
      ![](images/CentOS/img016.png)
+
+- Set the Root Password
+
      ![](images/CentOS/img017.png)
+
+- Select the Create User option
+
+- Create a username and password. I also made this user an **administrator**
+
      ![](images/CentOS/img018.png)
-     ![](images/CentOS/img019.png)
+
+- Click on  **License Information**
+
      ![](images/CentOS/img020.png)
+
+- Click on **Finish Configuration**
+
      ![](images/CentOS/img022.png)
 
- - Start terminal windows
+ - Start a terminal window by right clicking on the **Desktop**. Once a terminal windows is open, enter the following command
 
  - `$ sudo su`
+
+ - You should not be at a **#** Prompt
 
  - If the hostnames have not been set correctly, you can us the following commands to set the Master and node to:`kmaster` and `knode1` 
  
     ```
-    # hostnamectl set-hostname kmaster
+    hostnamectl set-hostname kmaster
     ``` 
 
 - Turn off Swap
@@ -113,9 +182,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 
     ![](images/CentOS/img034.png)
  
-- Setup yum to install kubernetes:
+- Setup yum to install kubernetes - Note, you will run the following commands at the **#** prompt until instructed otherwise:
 
-    Run commands as `sudo su` at the **#** prompt
     ```
     cat <<EOF > /etc/yum.repos.d/kubernetes.repo
     [kubernetes]
@@ -132,21 +200,18 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 
 - Run yum to install kubernetes and docker:
 
-    Run commands as `sudo su` at the **#** prompt
     ```
     yum install -y kubelet kubeadm kubectl docker -y
     ```
 
 - Update the kubernetes config file:
 
-    Run commands as `sudo su` at the **#** prompt
     ```
     sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
     ```
 
 - Enable docker and kubernetes
 
-    Run commands as `sudo su` at the **#** prompt
     ```
     systemctl enable docker && systemctl enable kubelet
     systemctl start docker && systemctl start kubelet
@@ -156,18 +221,17 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 
 ### **Master only** install
 
-- Setup Kubernetes
+- Setup Kubernetes - Run the commands as `sudo su` at the **#** prompt
 
-    Run the commands as `sudo su` at the **#** prompt
     ```
     kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=REPLACE-WITH-YOUR-IP-ADDRESS
     ```
 
-- **Copy the Join** message and store locall for later use.
+- **Copy the Join** command and store it locally. This command will be used later when joining the node to the master. **It's important to not lose this command**.
 
     ![](images/CentOS/img040.png)
 
-- Exit to **$** / kubeuser / non sudo user
+- Exit the **sudo** user to the **$** 
 
     If connected as `sudo`, exit to the **$** prompt
     ```
@@ -192,7 +256,7 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 
     ![](images/CentOS/img041.png)
 
-- Continue with the [KubeNetConfig.md](./KubeNetConfig.md) entryto complete the Kubernetes install.
+- Continue with the [KubeNetConfig.md](./KubeNetConfig.md) documentation to complete the Kubernetes install.
 
 
 

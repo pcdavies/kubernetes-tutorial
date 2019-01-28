@@ -6,7 +6,7 @@
 
 ### ***Step 2***: Install the Windows Image: 
 
-- Using VMWare Fusion, install widnows server 1809 images
+- Using VMWare Fusion, install widnows server 1809 image - the following screen shots will provide an overview the options I selected to install the image
 
      ![](images/windowsnode/img01.png)
      ![](images/windowsnode/img02.png)
@@ -26,6 +26,9 @@
 - Install VMWare Tools
 
      ![](images/windowsnode/img15.png)
+
+- Change to the `d:\` directory and retun the **setup.exe** file
+
      ![](images/windowsnode/img16.png)
      
 
@@ -56,7 +59,7 @@
     Cscript %windir%\system32\SCRegEdit.wsf /ar 0
     ```
 
-- Create a Network Share Drive
+- Create a Network Share Drive. This share will be useful if you need to copy files to the Windows Image - for example; when we soon copy the kube exe files.
 
     ```
     net share Utils=c:\k /Grant:administrators,FULL
@@ -92,8 +95,6 @@
 
     ```
 
-### **Step xxx**: 
-
 - Once reloaded, enter Powershell, and check on the docker version
 
     ```
@@ -116,7 +117,7 @@
     docker pull mcr.microsoft.com/windows/nanoserver:1809
     ```
 
-- Tag the image
+- Tag the image. 
 
     ```
     docker tag mcr.microsoft.com/windows/nanoserver:1809 microsoft/nanoserver:latest
@@ -188,7 +189,7 @@
     rm -recurse -force master,master.zip
     ```
 
-### **Step 1**: Join knode **(Windows)** to kmaster
+### **Step 4**: Join knode **(Windows)** to kmaster
 
 - Follow these instructions **Joining the Windows Node**
 
@@ -205,13 +206,13 @@
 
     .\start.ps1 -ManagementIP <Windows Node IP> -ClusterCIDR 10.244.0.0/16 -ServiceCIDR 10.96.0.0/12 -KubeDnsServiceIP 10.96.0.10
     ```
-- Create a windows namespace
+- Create a windows namespace. We will always install Windows pods using this namespace, as the default namespace will be configured to automatically install the istio side car container. This would cause and error on the Windows ndoes, as side cars are not yet supported.
 
     ```
     kubectl create namespace windows
     ```
 
-- **Taint** the winodws node, to control what is deployed to it
+- **Taint** the winodws node, to control what is deployed to it. We will set the Windows Pod deployments to **Tolerate** the windows Taint.
 
     ```
     kubectl taint nodes knodew opsys-taint=windows:NoSchedule
@@ -312,4 +313,5 @@
     kubectl get svc/kube-dns -n kube-system
     ```
 
+- Continue with the [Istio.md](./KubeNetConfig.md) documentation.
 

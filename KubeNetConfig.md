@@ -1,7 +1,7 @@
 
 # Setup Kubernetes
 
-If you plan on including Windows nodes, you need to set up the Flannel Network and Proxy configuration differently. Choose the correct **Step 1** based on the desire to include Windows nodes.
+If you plan on including Windows nodes, you need to set up the Flannel Network and Proxy configuration using **Host Gateway Mode**, as apposed to **VXLAN** Mode. Choose the correct version of **Step 1** based on the desire to include Windows nodes.
 
 ## Flannel Install
 
@@ -9,7 +9,9 @@ If you plan on including Windows nodes, you need to set up the Flannel Network a
 
 The following is to be performed on the **kmaster** image
 
-- Notice that not all pods are working. We will resolve this by installing the pod network. In our example we are going to use a **Flannel** network. ***Run commands*** as `kubeuser` at the **$** prompt
+- Notice that not all pods are working. We will resolve this by installing the pod network. In our example we are going to use a **Flannel** network. 
+
+- ***Run commands*** as `kubeuser` at the **$** prompt - **NOT** at the sudo **#** prompt
 
     ```
     $ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
@@ -119,8 +121,7 @@ The following is to be performed on the **kmaster** image
     
 ### **Step 2**: Install the Dashboard
 
-- We are going to install the Dashboard Pod prior to joining a node. this will cause the Dashboard to be installed on the Master Node, which is a good practice. Run the following command to install the Dashboard
-
+- We are going to install the Dashboard prior to joining a node. Installing with only the Master node available will cause the Dashboard to be installed on the Master Node, which is a good practice. Run the following command to install the Dashboard
 
     ```
     kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
@@ -182,7 +183,9 @@ The following is to be performed on the **kmaster** image
 
 ***Note:*** The following step's command must be run only on the "Node"
 
-- On the **knode** image impen a **terminal** window and run the following command:
+- **VERIFY** that you are on the **KNODE1** Image
+
+- On the **knode1** image open a **terminal** window and run the following command:
     
     ```
     sudo su
@@ -196,7 +199,7 @@ The following is to be performed on the **kmaster** image
 
 ***Note:*** The commands in this step are run on the "Master"
 
-- Return to a terminal window on the **kmaster** image and run the following command. Wait until **knode1** shows a **Ready** state
+- ***Return to a terminal window*** on the **kmaster** image and run the following command. Wait until **knode1** shows a **Ready** state
 
     Run commands as `kubeuser` at the **$** prompt
     ```
@@ -247,5 +250,9 @@ The following is to be performed on the **kmaster** image
 
     ![](images/kubenetconfig/img223.png)
 
-- Return the [README.md](./README.md) to complete the Kubernetes install
+- If you are going to Create a **Windows Node**, go [WindowsNode.md Document](./WindowsNode.md)
+
+**OR**
+
+- Got to the [Istio.md Document](./README.md) to install and configure Istio
 

@@ -3,16 +3,18 @@
 
 If you plan on including Windows nodes, you need to set up the Flannel Network and Proxy configuration differently. Choose the correct **Step 1** based on the desire to include Windows nodes.
 
+## Flannel Install
+
 ### ***Step 1***: With ***No Windows Nodes*** - Install the Flannel Network
 
 The following is to be performed on the **kmaster** image
 
-- Notice that not all pods are working. We will resolve this by installing the pod network. In our example we are going to use a **Flannel** network. Run commands as `kubeuser` at the **$** prompt
+- Notice that not all pods are working. We will resolve this by installing the pod network. In our example we are going to use a **Flannel** network. ***Run commands*** as `kubeuser` at the **$** prompt
 
     ```
-    kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+    $ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
     ```
-    
+
     ![](images/KubeNet/img33.png)
 
 - Go to **Step 2**
@@ -112,6 +114,8 @@ The following is to be performed on the **kmaster** image
     ```
 
     ![](images/KubeNet/img33.6.png)
+
+## Dashboard Install
     
 ### **Step 2**: Install the Dashboard
 
@@ -171,6 +175,8 @@ The following is to be performed on the **kmaster** image
 - Click on the **Save** button to save the token
 
     ![](images/KubeNet/img43.png)
+
+## Join the Node
 
 ### **Step 3**: Join the knode1 **(Linux)** node to the kmaster
 

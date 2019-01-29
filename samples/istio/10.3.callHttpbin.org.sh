@@ -5,6 +5,30 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
+echo 'Creating ServiceEntry httpbin-ext'
+
+kubectl apply -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: httpbin-ext
+spec:
+  hosts:
+  - httpbin.org
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
+  resolution: DNS
+  location: MESH_EXTERNAL
+EOF
+
+echo 'kubectl describe serviceentry httpbin-ext'
+echo ' '
+kubectl describe serviceentry httpbin-ext
+echo ' '
+
+
 export SOURCE_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
 
 echo 'Connecting to pod....'

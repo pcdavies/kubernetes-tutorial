@@ -41,7 +41,7 @@ export INGRESS_HOST=$(kubectl get po -l istio=ingressgateway -n istio-system -o 
 export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
 echo $GATEWAY_URL
 
-echo 'Trying multipe times for an http return code of 200...'
+echo 'Trying multiple times for an http return code of 200...'
 
 while ((i<=6)) && [[ "$(curl -o /dev/null -s -w ''%{http_code}'' http://${GATEWAY_URL}/productpage)" != "200" ]]; do
   curl -o /dev/null -s -w "%{http_code}\n" http://${GATEWAY_URL}/productpage

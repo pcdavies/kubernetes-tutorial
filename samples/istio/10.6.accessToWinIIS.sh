@@ -5,6 +5,10 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
+if [ "$IIS_HOST" = "" ]; then
+    echo 'IIS_HOST environment is not set.'
+    exit
+fi
 echo 'Creating ServiceEntry winiis'
 
 kubectl apply -f - <<EOF
@@ -14,7 +18,7 @@ metadata:
   name: winiis-ext
 spec:
   hosts:
-  - vdc-devappren01.stormwind.local
+  - $IIS_HOST
   ports:
   - number: 31699
     name: http
@@ -34,6 +38,6 @@ echo 'Connecting to pod....'
 echo 'kubectl exec -it $SOURCE_POD -c sleep sh'
 echo ' '
 echo 'Once Connected, Enter this command:'
-echo 'curl http://vdc-devappren01.stormwind.local:31699 -I'
+echo 'curl http://$IIS_HOST:31699 -I'
 echo ' '
 kubectl exec -it $SOURCE_POD -c sleep sh

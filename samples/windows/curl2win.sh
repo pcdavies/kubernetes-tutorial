@@ -19,7 +19,7 @@ echo 'Connecting to pod....'
 echo 'kubectl exec -it $CURL_POD -c sleep sh'
 echo ' '
 echo 'Once Connected, Enter this command:'
-echo 'curl http://httpbin.org/headers -I'
+echo 'curl -I http://iis-svc.windows'
 echo ' '
 
 kubectl exec -it -n=windows $CURL_POD -c curl2win sh

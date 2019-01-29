@@ -414,7 +414,7 @@ spec:
 
 ![](./images/demos/img004.png)
 
-### 04 - Shift All Traffic to Reviews V3
+### 04.1 - Shift All Traffic to Reviews V3
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3

@@ -44,6 +44,6 @@ echo 'Connecting to pod....'
 echo 'kubectl exec -it $SOURCE_POD -c sleep sh'
 echo ' '
 echo 'Once Connected, Enter this command:'
-echo 'curl http://$IIS_HOST:$IIS_PORT -I'
+echo 'curl http://'$IIS_HOST':'$IIS_PORT' -I'
 echo ' '
 kubectl exec -it $SOURCE_POD -c sleep sh

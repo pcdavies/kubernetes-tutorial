@@ -432,6 +432,9 @@ spec:
 
 ```
 
+![](./images/demos/img005.png)
+
+
 ### 04.5 - Shift to Reviews V2 when Jason, else Reviews V3
 
 ```yaml
@@ -457,7 +460,9 @@ spec:
         subset: v3
 ```
 
-### 05 - Delay 2 Seconds and Route to Reviews V1
+![](./images/demos/img006.png)
+
+### 05 - Delay 2 Seconds and Route to Ratings V1
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -496,7 +501,68 @@ spec:
     timeout: 0.5s
 ```
 
-### 07 - Cause a 7 Second Delay if Jason - Route to Reviews V1 and V2
+![](./images/demos/img007.png)
+
+### 07 - If Jason, 7 Second delay on Reviews V2, else route to v1
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: jason
+    route:
+    - destination:
+        host: reviews
+        subset: v2
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+```
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: jason
+    fault:
+      delay:
+        percent: 100
+        fixedDelay: 7s
+    route:
+    - destination:
+        host: ratings
+        subset: v1
+  - route:
+    - destination:
+        host: ratings
+        subset: v1
+```
+
+- When NOT Jason
+
+    ![](./images/demos/img008.png)
+
+- When Jason
+
+
+    ![](./images/demos/img009.png)
 
 ## Egress Access
 
@@ -534,6 +600,10 @@ spec:
         imagePullPolicy: IfNotPresent
 ```
 
+### 10.2 Test Calling httpbin.org
+
+![](./images/demos/img010.png)
+
 ### 10.3 Service Entry for httpbin.org
 
 ```yaml
@@ -551,6 +621,8 @@ spec:
   resolution: DNS
   location: MESH_EXTERNAL
 ```
+
+![](./images/demos/img011.png)
 
 ### 10.4 Google Service Entry
 
@@ -588,6 +660,8 @@ spec:
           number: 443
       weight: 100
 ```
+
+![](./images/demos/img012.png)
 
 ### 10.6 Access to IIS-Window Service
 

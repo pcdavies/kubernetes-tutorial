@@ -10,7 +10,9 @@ export SOURCE_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.n
 kubectl get serviceentries
 kubectl get virtualservices
 
-kubectl delete serviceentry httpbin-ext google winiis-ext
+kubectl delete serviceentry httpbin-ext 
+kubectl delete serviceentry google 
+kubectl delete serviceentry winiis-ext
 kubectl delete virtualservice google
 
 kubectl get serviceentries

@@ -681,3 +681,5 @@ spec:
   resolution: DNS
   location: MESH_EXTERNAL
 ```
+
+![](./images/demos/img013.png)

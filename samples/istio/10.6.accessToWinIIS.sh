@@ -9,6 +9,12 @@ if [ "$IIS_HOST" = "" ]; then
     echo 'IIS_HOST environment is not set.'
     exit
 fi
+
+if [ "$IIS_PORT" = "" ]; then
+    echo 'IIS_PORT is not set.'
+    exit
+fi
+
 echo 'Creating ServiceEntry winiis'
 
 kubectl apply -f - <<EOF
@@ -20,7 +26,7 @@ spec:
   hosts:
   - $IIS_HOST
   ports:
-  - number: 31699
+  - number: $IIS_PORT
     name: http
     protocol: HTTP
   resolution: DNS
@@ -38,6 +44,6 @@ echo 'Connecting to pod....'
 echo 'kubectl exec -it $SOURCE_POD -c sleep sh'
 echo ' '
 echo 'Once Connected, Enter this command:'
-echo 'curl http://$IIS_HOST:31699 -I'
+echo 'curl http://$IIS_HOST:$IIS_PORT -I'
 echo ' '
 kubectl exec -it $SOURCE_POD -c sleep sh

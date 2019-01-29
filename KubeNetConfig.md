@@ -37,7 +37,7 @@ The following is to be performed on the **kmaster** image
     ```
 - Past the fillowing into the file, and save
 
-    ```
+    ```yaml
     spec:
       template:
         spec:
@@ -84,7 +84,7 @@ The following is to be performed on the **kmaster** image
 
 - Run the following **sed** command to change `vxlan` to `host-gw` in the **kube-flannel.yml** file
 
-    ```
+    ```bash
     sed 's/vxlan/host-gw/' -i kube-flannel.yml
     ```
 
@@ -210,7 +210,7 @@ The following is to be performed on the **kmaster** image
 
 - Run the following command to deploy the **nginx** service and deployment
 
-    ```
+    ```yaml
     cat <<EOF | kubectl apply -f -
     apiVersion: v1
     kind: Service

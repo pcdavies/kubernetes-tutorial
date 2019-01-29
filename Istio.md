@@ -9,7 +9,7 @@
 - Download Kubernetes Release
 
     Run all commands a the **$** prompt:
-    ```
+    ```bash
     curl -L https://git.io/getLatestIstio | sh -
 
     cd ist*
@@ -18,7 +18,7 @@
 - Add the path of your current directory to your .bashrc, and source that file ***Note***: The version (e.g. 1.0.5) shown below might not be correct - you ***MUST*** set the right verion for your path
 
     Run all commands a the **$** prompt:
-    ```
+    ```bash
     echo 'export PATH=$HOME/istio-1.0.5/bin:$PATH' >> ~/.bashrc
 
     . ~/.bashrc
@@ -31,7 +31,7 @@
 - Download and install client from a script
 
     Run all commands a the **$** prompt:
-    ```
+    ```bash
     curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh
 
     chmod 700 get_helm.sh
@@ -45,7 +45,7 @@
 - Render Istio's core componentes to a Kubernetes Manifest
 
     Run all commands a the **$** prompt:
-    ```
+    ```bash
     helm template install/kubernetes/helm/istio --name istio --namespace istio-system > $HOME/istio.yaml
     ```
 
@@ -106,7 +106,7 @@
 - Determine IP and Port
 
     Run all commands a the **$** prompt:
-    ```
+    ```bash
     export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
 
     export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}')
@@ -224,7 +224,7 @@ In these steps we will get Grafana, Tracing and Kiali running
 
 - Create the Secret
 
-    ```
+    ```yaml
     cat <<EOF | kubectl apply -f -
     apiVersion: v1
     kind: Secret
@@ -345,19 +345,19 @@ You will run this from a host on which you have kubectl running. Wait for all th
 
 - Install git on `kmaster`
 
-    ```
+    ```bash
     sudo yum install git
     ```
 
 - Create a directory to place the examples
 
-    ```
+    ```bash
     mkdir ~/repos
     ```
 
 - Change to the directory and clone the git repository
 
-    ```
+    ```bash
     cd ~/repos
 
     git clone https://github.com/pcdavies/kubernetes-tutorial.git
@@ -366,7 +366,7 @@ You will run this from a host on which you have kubectl running. Wait for all th
 
 - Change to the directory where the Istio demo scripts are located. Note: all of the examples are taken from the [Istio Booking Application Documentation](https://istio.io/docs/examples/bookinfo/)
 
-    ```
+    ```bash
     cd ~/repos/kubernetes-tutorial/samples/istio
 
     ls -la

@@ -118,7 +118,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 - Turn off Swap
 
     Run commands as `sudo su` at the **#** prompt
-    ```
+
+    ```bash
     setenforce 0
 
     sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
@@ -143,7 +144,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 - Turn off the firewall
 
     Run commands as `sudo su` at the **#** prompt
-    ```
+
+    ```bash
     systemctl stop firewalld
     systemctl disable firewalld
     ```
@@ -151,7 +153,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 - Allow Bridge/internet access over nat
 
     Run commands as `sudo su` at the **#** prompt
-    ```
+
+    ```bash
     modprobe br_netfilter
  
     echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
@@ -162,7 +165,7 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 - Make permanent but editing sysctl.conf and causing br_netfilter to load
 
     Run commands as `sudo su` at the **#** prompt
-    ```
+    ```bash 
     echo 'br_netfilter' > /etc/modules-load.d/br_netfilter.conf
  
     cat <<EOF >> /etc/sysctl.conf
@@ -184,7 +187,7 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
  
 - Setup yum to install kubernetes - Note, you will run the following commands at the **#** prompt until instructed otherwise:
 
-    ```
+    ```bash
     cat <<EOF > /etc/yum.repos.d/kubernetes.repo
     [kubernetes]
     name=Kubernetes
@@ -206,7 +209,7 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 
 - Update the kubernetes config file:
 
-    ```
+    ```bash
     sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
     ```
 
@@ -241,7 +244,7 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
     ```
 
     Run commands as `kubeuser` at the **$** prompt
-    ```
+    ```bash
     mkdir -p $HOME/.kube
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config

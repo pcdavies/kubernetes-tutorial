@@ -14,7 +14,7 @@ metadata:
   name: winiis-ext
 spec:
   hosts:
-  - 10.100.44.97
+  - vdc-devappren01.stormwind.local
   ports:
   - number: 31699
     name: http
@@ -34,6 +34,6 @@ echo 'Connecting to pod....'
 echo 'kubectl exec -it $SOURCE_POD -c sleep sh'
 echo ' '
 echo 'Once Connected, Enter this command:'
-echo 'curl http://10.100.44.97:31699 -I'
+echo 'curl http://vdc-devappren01.stormwind.local:31699 -I'
 echo ' '
 kubectl exec -it $SOURCE_POD -c sleep sh

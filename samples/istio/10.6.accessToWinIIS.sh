@@ -7,11 +7,14 @@ fi
 
 if [ "$IIS_HOST" = "" ]; then
     echo 'IIS_HOST environment is not set.'
+    kubectl get nodes
+    echo ' '
     exit
 fi
 
 if [ "$IIS_PORT" = "" ]; then
     echo 'IIS_PORT is not set.'
+    kubectl get services -n=windows
     exit
 fi
 
@@ -33,6 +36,7 @@ spec:
   location: MESH_EXTERNAL
 EOF
 
+
 echo 'kubectl describe serviceentry winiis-ext'
 echo ' '
 kubectl describe serviceentry winiis-ext
@@ -40,6 +44,14 @@ echo ' '
 
 export SOURCE_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
 
+
+echo '--------------------'
+kubectl get nodes
+echo '--------------------'
+kubectl get services -n=windows
+echo '--------------------'
+echo 'Use the list above to to curl the iis-svc'
+echo ' '
 echo 'Connecting to pod....'
 echo 'kubectl exec -it $SOURCE_POD -c sleep sh'
 echo ' '

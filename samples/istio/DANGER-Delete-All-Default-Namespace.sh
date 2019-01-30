@@ -38,6 +38,9 @@ kubectl delete deployment httpbin-v1
 kubectl delete deployment httpbin-v2
 kubectl delete deployment sleep
 kubectl delete deployment nginx-server
+kubectl delete deployment mongodb-v1
+kubectl delete deployment mysqldb-v1
+kubectl delete deployment ratings-v2
 
 trap cleanup EXIT
 
@@ -64,7 +67,7 @@ kubectl get virtualservices
 kubectl get destinationrules
 kubectl get gateway
 kubectl get pods
-while [ $(kubectl get pods | grep -E 'ratings|reviews|productpage|httpbin|sleep|nginx-server|sleep|NAME' | wc -l) -gt 1 ]; do
+while [ $(kubectl get pods | grep -E 'ratings|reviews|productpage|httpbin|sleep|nginx-server|sleep|mongodb|mysql|NAME' | wc -l) -gt 1 ]; do
   kubectl get pods
   echo 'Sleeping until deleted...'
   sleep 8

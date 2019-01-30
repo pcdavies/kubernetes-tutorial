@@ -41,6 +41,7 @@ kubectl delete deployment nginx-server
 kubectl delete deployment mongodb-v1
 kubectl delete deployment mysqldb-v1
 kubectl delete deployment ratings-v2
+kubectl delete deployment ratings-v2-mysql
 
 trap cleanup EXIT
 

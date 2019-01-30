@@ -5,6 +5,7 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
+kubectl get services
 kubectl get virtualservices
 kubectl get destinationrules
 kubectl get gateway
@@ -17,7 +18,7 @@ export SCRIPTDIR=$ISTIO_DIR/samples/bookinfo/platform/kube/
 
 echo "using NAMESPACE=${NAMESPACE}"
 
-protos=( destinationrules virtualservices gateways serviceentries)
+protos=( destinationrules virtualservices gateways serviceentries services)
 for proto in "${protos[@]}"; do
   for resource in $(istioctl get -n ${NAMESPACE} $proto | awk 'NR>1{print $1}'); do
     istioctl delete -n ${NAMESPACE} $proto $resource;

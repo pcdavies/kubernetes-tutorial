@@ -18,7 +18,7 @@ export SCRIPTDIR=$ISTIO_DIR/samples/bookinfo/platform/kube/
 
 echo "using NAMESPACE=${NAMESPACE}"
 
-protos=( destinationrules virtualservices gateways serviceentries services)
+protos=( destinationrules virtualservices gateways serviceentries)
 for proto in "${protos[@]}"; do
   for resource in $(istioctl get -n ${NAMESPACE} $proto | awk 'NR>1{print $1}'); do
     istioctl delete -n ${NAMESPACE} $proto $resource;
@@ -34,6 +34,13 @@ function cleanup() {
   rm -f ${OUTPUT}
 }
 
+kubectl delete services ratings
+kubectl delete services reviews
+kubectl delete services details
+kubectl delete services mongodb
+kubectl delete services mysqldb
+kubectl delete services productpage
+kubectl delete services ratings
 
 kubectl delete deployment httpbin-v1
 kubectl delete deployment httpbin-v2

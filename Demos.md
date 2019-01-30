@@ -564,6 +564,110 @@ spec:
 
     ![](./images/demos/img009.png)
 
+### 09.1 Install MongoDB and Rating Service
+
+- MongoDB Deployment and Service
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+spec:
+  ports:
+  - port: 27017
+    name: mongo
+  selector:
+    app: mongodb
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mongodb-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongodb
+        version: v1
+    spec:
+      containers:
+      - name: mongodb 
+        image: istio/examples-bookinfo-mongodb:1.8.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 27017
+```
+
+- Ratings V2 Deployment and Service
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ratings-v2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ratings
+        version: v2
+    spec:
+      containers:
+      - name: ratings
+        image: istio/examples-bookinfo-ratings-v2:1.8.0
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: MONGO_DB_URL
+            value: mongodb://mongodb:27017/test
+        ports:
+        - containerPort: 9080
+```
+
+- Review and Rating Virtual Services
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v2
+      weight: 30
+    - destination:
+        host: reviews
+        subset: v3
+      weight: 70
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - route:
+    - destination:
+        host: ratings
+        subset: v2
+      weight: 70
+    - destination:
+        host: ratings
+        subset: v1
+      weight: 30
+```
+
 ## Egress Access
 
 ### 10.1 Create Sleep Service
@@ -666,7 +770,6 @@ spec:
 ### 10.6 Access to IIS-Window Service
 
 ```yaml
-kubectl apply -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:

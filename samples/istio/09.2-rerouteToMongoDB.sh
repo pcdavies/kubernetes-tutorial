@@ -5,5 +5,46 @@ if [ "$ISTIO_DIR" = "" ]; then
 fi
 
 
-kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-ratings-db.yaml
+# kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-ratings-db.yaml
+
+# modified the above script 
+
+kubectl apply -f -<<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v2
+      weight: 30
+    - destination:
+        host: reviews
+        subset: v3
+      weight: 70
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - route:
+    - destination:
+        host: ratings
+        subset: v2
+      weight: 70
+    - destination:
+        host: ratings
+        subset: v1
+      weight: 30
+EOF
+
 

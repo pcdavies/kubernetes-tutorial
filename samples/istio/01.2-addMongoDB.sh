@@ -9,13 +9,18 @@ echo 'Adding a database for Ratings'
 
 kubectl apply -f $ISTIO_DIR/samples/bookinfo/platform/kube/bookinfo-db.yaml
 
-kubectl get pods
-kubectl get services
-
-
 while [ $(kubectl get pods | grep -E 'mongodb' | grep 'Running' | wc -l) -lt 1 ]; do
   kubectl get pods
   echo 'Sleeping until the Database is ready...'
+  sleep 4
+done
+
+
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/platform/kube/bookinfo-ratings-v2.yaml
+
+while [ $(kubectl get pods | grep -E 'ratings-v2' | grep 'Running' | wc -l) -lt 1 ]; do
+  kubectl get pods
+  echo 'Sleeping until the ratings-v2 is ready...'
   sleep 4
 done
 

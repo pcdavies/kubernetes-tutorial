@@ -19,6 +19,14 @@ while [ $(kubectl get pods | grep -E 'mysqldb' | grep 'Running' | wc -l) -lt 1 ]
   sleep 4
 done
 
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/platform/kube/bookinfo-ratings-v2-mysql.yaml
+
+while [ $(kubectl get pods | grep -E 'ratings-v2' | grep 'Running' | wc -l) -lt 1 ]; do
+  kubectl get pods
+  echo 'Sleeping until the ratings-v2 is ready...'
+  sleep 4
+done
+
 echo 'Create the Virtual Service'
 
 kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-ratings-mysql.yaml

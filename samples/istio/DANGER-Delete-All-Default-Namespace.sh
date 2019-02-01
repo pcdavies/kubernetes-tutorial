@@ -39,6 +39,7 @@ kubectl delete services reviews
 kubectl delete services details
 kubectl delete services mongodb
 kubectl delete services mysqldb
+kubectl delete services mysqldb -n=vm
 kubectl delete services productpage
 kubectl delete services ratings
 
@@ -50,6 +51,7 @@ kubectl delete deployment mongodb-v1
 kubectl delete deployment mysqldb-v1
 kubectl delete deployment ratings-v2
 kubectl delete deployment ratings-v2-mysql
+kubectl delete deployment ratings-v2-mysql-vm
 
 trap cleanup EXIT
 

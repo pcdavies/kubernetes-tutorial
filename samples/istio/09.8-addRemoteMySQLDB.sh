@@ -5,6 +5,9 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
+echo 'Registering MySQL Host - using this IP: '$MYSQL_HOST
+istioctl register mysqldb $MYSQL_HOST 3306
+
 echo 'Adding a database for Ratings'
 
 # kubectl apply -f $ISTIO_DIR/samples/bookinfo/platform/kube/bookinfo-ratings-v2-mysql-vm.yaml
@@ -37,9 +40,9 @@ spec:
           - name: MYSQL_DB_PORT
             value: "3306"
           - name: MYSQL_DB_USER
-            value: kubeuser
+            value: $MYSQL_USER
           - name: MYSQL_DB_PASSWORD
-            value: Welcome1
+            value: $MYSQL_PASSWORD
         ports:
         - containerPort: 9080
 EOF

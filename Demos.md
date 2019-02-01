@@ -683,7 +683,6 @@ istioctl register -n vm mysqldb $MYSQL_HOST 3306
 - Deployment
 
 ```yaml
-kubectl apply -f -<<EOF
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -715,13 +714,11 @@ spec:
             value: $MYSQL_PASSWORD
         ports:
         - containerPort: 9080
-EOF
 ```
 
 - Virtual Services
 
 ```yaml
-kubectl apply -f -<<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -757,7 +754,6 @@ spec:
         host: ratings
         subset: v2-mysql-vm
       weight: 50
-EOF
 ```
 
 ![](./images/demos/img015.png)

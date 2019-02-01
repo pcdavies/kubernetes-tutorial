@@ -670,6 +670,98 @@ spec:
 
 ![](./images/demos/img014.png)
 
+### 09.8 MySQL Access to Remove VM
+
+- Create the Service in a separate namespace
+
+```
+kubectl create namespace vm
+
+istioctl register -n vm mysqldb $MYSQL_HOST 3306
+```
+
+- Deployment
+
+```yaml
+kubectl apply -f -<<EOF
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ratings-v2-mysql-vm
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ratings
+        version: v2-mysql-vm
+    spec:
+      containers:
+      - name: ratings
+        image: istio/examples-bookinfo-ratings-v2:1.8.0
+        imagePullPolicy: IfNotPresent
+        env:
+          # This assumes you registered your mysql vm as
+          # istioctl register -n vm mysqldb 1.2.3.4 3306
+          - name: DB_TYPE
+            value: "mysql"
+          - name: MYSQL_DB_HOST
+            value: mysqldb.vm.svc.cluster.local
+          - name: MYSQL_DB_PORT
+            value: "3306"
+          - name: MYSQL_DB_USER
+            value: $MYSQL_USER
+          - name: MYSQL_DB_PASSWORD
+            value: $MYSQL_PASSWORD
+        ports:
+        - containerPort: 9080
+EOF
+```
+
+- Virtual Services
+
+```yaml
+kubectl apply -f -<<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v2
+      weight: 20
+    - destination:
+        host: reviews
+        subset: v3
+      weight: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - route:
+    - destination:
+        host: ratings
+        subset: v2
+      weight: 50
+    - destination:
+        host: ratings
+        subset: v2-mysql-vm
+      weight: 50
+EOF
+```
+
+![](./images/demos/img015.png)
+
 ## Egress Access
 
 ### 10.1 Create Sleep Service

@@ -5,4 +5,4 @@ export INGRESS_HOST=$(kubectl get po -l istio=ingressgateway -n istio-system -o 
 export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
 echo $GATEWAY_URL
 
-watch -n 1 curl -o /dev/null -s -w %{http_code} $GATEWAY_URL/productpage
+watch -n 2 curl -o /dev/null -s -w %{http_code} $GATEWAY_URL/productpage

@@ -47,7 +47,7 @@ spec:
         - containerPort: 9080
 EOF
 
-while [ $(kubectl get pods | grep -E 'ratings-v2' | grep 'Running' | wc -l) -lt 1 ]; do
+while [ $(kubectl get pods | grep -E 'ratings-v2-mysql' | grep 'Running' | wc -l) -lt 1 ]; do
   kubectl get pods
   echo 'Sleeping until the ratings-v2 is ready...'
   sleep 4

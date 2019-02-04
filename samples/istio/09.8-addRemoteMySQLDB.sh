@@ -5,13 +5,25 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
+if [ "$MYSQL_HOST" = "" ]; then
+    echo 'MYSQL_HOST environment is not set.'
+    echo ' '
+    exit
+fi
+
+if [ "$MYSQL_PORT" = "" ]; then
+    echo 'MYSQL_PORT is not set - usually port 3306'
+    echo ' '
+    exit
+fi
+
 
 # Not sure why, but can't register mysqldb in the default namespace that has auto side car deployment?
 echo 'Create namespace vm'
 kubectl create namespace vm
 
 echo 'Registering MySQL Host - using this IP: '$MYSQL_HOST
-istioctl register -n vm mysqldb $MYSQL_HOST 3306
+istioctl register -n vm mysqldb $MYSQL_HOST $MYSQL_PORT
 
 
 echo 'Adding a database for Ratings'
@@ -42,9 +54,9 @@ spec:
           - name: DB_TYPE
             value: "mysql"
           - name: MYSQL_DB_HOST
-            value: mysqldb.vm.svc.cluster.local
+            value: $MYSQL_HOST
           - name: MYSQL_DB_PORT
-            value: "3306"
+            value: $MYSQL_PORT
           - name: MYSQL_DB_USER
             value: $MYSQL_USER
           - name: MYSQL_DB_PASSWORD

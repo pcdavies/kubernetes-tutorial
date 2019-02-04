@@ -17,6 +17,18 @@ if [ "$MYSQL_PORT" = "" ]; then
     exit
 fi
 
+if [ "$MYSQL_USER" = "" ]; then
+    echo 'MYSQL_USER is not set'
+    echo ' '
+    exit
+fi
+
+if [ "$MYSQL_PASSWORD" = "" ]; then
+    echo 'MYSQL_PASSWORD is not set'
+    echo ' '
+    exit
+fi
+
 
 # Not sure why, but can't register mysqldb in the default namespace that has auto side car deployment?
 echo 'Create namespace vm'

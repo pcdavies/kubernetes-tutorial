@@ -66,9 +66,9 @@ spec:
           - name: DB_TYPE
             value: "mysql"
           - name: MYSQL_DB_HOST
-            value: \"'$MYSQL_HOST'\"
+            value: "192.168.168.193"
           - name: MYSQL_DB_PORT
-            value: \"'$MYSQL_PORT'\"
+            value: "3306"
           - name: MYSQL_DB_USER
             value: $MYSQL_USER
           - name: MYSQL_DB_PASSWORD

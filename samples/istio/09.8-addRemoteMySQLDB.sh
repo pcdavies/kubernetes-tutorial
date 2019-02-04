@@ -66,7 +66,7 @@ spec:
           - name: DB_TYPE
             value: "mysql"
           - name: MYSQL_DB_HOST
-            value: "192.168.168.193"
+            value: "mysqldb.vm.svc.cluster.local"
           - name: MYSQL_DB_PORT
             value: "3306"
           - name: MYSQL_DB_USER

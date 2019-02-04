@@ -34,14 +34,15 @@ function cleanup() {
   rm -f ${OUTPUT}
 }
 
-kubectl delete services ratings
-kubectl delete services reviews
-kubectl delete services details
-kubectl delete services mongodb
-kubectl delete services mysqldb
-kubectl delete services mysqldb -n=vm
-kubectl delete services productpage
-kubectl delete services ratings
+kubectl delete service ratings
+kubectl delete service reviews
+kubectl delete service details
+kubectl delete service mongodb
+kubectl delete service mysqldb
+kubectl delete service mysqldb -n=vm
+kubectl delete service productpage
+kubectl delete service ratings
+kubectl delete service sleep
 
 kubectl delete deployment httpbin-v1
 kubectl delete deployment httpbin-v2

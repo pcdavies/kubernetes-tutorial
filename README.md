@@ -17,7 +17,7 @@ In this tutorial. we will install 2 VM Images - with an opitonal 3rd for Windows
 
 ### **Step 4**: Install Nginx for Ingress
 
-- [Istio Config](./Nginx.md) and Install
+- [Nginx Config](./Nginx.md) and Install
 
 ### **Step 5**: Optionally, install and configure Istio
 

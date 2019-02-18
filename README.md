@@ -15,7 +15,11 @@ In this tutorial. we will install 2 VM Images - with an opitonal 3rd for Windows
 
 - [Windows 1809](./WindowsNode.md) and Sample App Install
 
-### **Step 4**: Istio Install and Config
+### **Step 4**: Install Nginx for Ingress
+
+- [Istio Config](./Nginx.md) and Install
+
+### **Step 5**: Optionally, install and configure Istio
 
 - [Istio Config](./Istio.md) and Sample App Install
 

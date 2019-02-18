@@ -372,14 +372,14 @@ Although not required, we are going to create a namespace **nginx** for all appl
 
 - Configure Port Forwarding
 
-If running on VBox or Vmware Fusion, you'll need to set up port forwarding so traffic for 30000 and 32000 is routed into the appropriate VM image. 
+    If running on VBox or Vmware Fusion, you'll need to set up port forwarding so traffic for 30000 and 32000 is routed into the appropriate VM image. 
 
-Also, set up the host file to route test.example.com to 127.0.0.1
+    Also, set up the host file to route test.example.com to 127.0.0.1
 
-You can now access these URLs:
+    You can now access these URLs:
 
-```
-http://test.example.com:30000/app1
-http://test.example.com:30000/app2
-http://test.example.com:32000/nginx_status
-```
+    ```
+    http://test.example.com:30000/app1
+    http://test.example.com:30000/app2
+    http://test.example.com:32000/nginx_status
+    ```

@@ -191,12 +191,6 @@
 
 ### **Step 4**: Join knode **(Windows)** to kmaster
 
-- Follow these instructions **Joining the Windows Node**
-
-    ```
-    https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/joining-windows-workers
-    ```
-
 - Join the Master
 
     ```

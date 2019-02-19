@@ -19,8 +19,11 @@ In this tutorial. we will install 2 VM Images - with an opitonal 3rd for Windows
 
 - [Nginx Config](./Nginx.md) and Install
 
-### **Step 5**: Optionally, install and configure Istio
+### **Step 5**: Optional - install and configure Istio
 
 - [Istio Config](./Istio.md) and Sample App Install
 
+### **Step 6**: Optional - Istio Demos
+
+- [Istio Demos](./Demos.md) Istio Booking Demo Scripts
 

@@ -18,3 +18,6 @@ echo 'URL for Mesh Dashboard: http://localhost:3000/dashboard/db/istio-workload-
 # echo 'URL for Jager - not working: http://[::1]:16686'
 echo 'URL for service graph: http://localhost:8088/force/forcegraph.html'
 
+echo 'Kubectl Proxy'
+kubectl proxy
+

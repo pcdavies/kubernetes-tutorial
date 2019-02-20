@@ -9,7 +9,7 @@ fi
 
 # modified the above script 
 
-kubectl apply -f -<<EOF
+kubectl -n $DEFAULT_ISTIO_NAMESPACE apply -f -<<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:

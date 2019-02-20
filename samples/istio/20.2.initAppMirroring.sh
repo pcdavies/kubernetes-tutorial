@@ -8,7 +8,7 @@ fi
 
 echo 'Deploy httpbin-v1'
 
-cat <<EOF | $ISTIO_DIR/bin/istioctl kube-inject -f - | kubectl create -f -
+cat <<EOF | $ISTIO_DIR/bin/istioctl kube-inject -f - | kubectl create -n $DEFAULT_ISTIO_NAMESPACE -f -
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -33,7 +33,7 @@ EOF
 
 echo 'Deploy httpbin-v2'
 
-cat <<EOF | $ISTIO_DIR/bin/istioctl kube-inject -f - | kubectl create -f -
+cat <<EOF | $ISTIO_DIR/bin/istioctl kube-inject -f - | kubectl create -n $DEFAULT_ISTIO_NAMESPACE -f -
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -57,7 +57,7 @@ EOF
 
 
 echo 'create httpbin service'
-cat <<EOF | kubectl create -f -
+cat <<EOF | kubectl create -n $DEFAULT_ISTIO_NAMESPACE -f -
 apiVersion: v1
 kind: Service
 metadata:
@@ -73,7 +73,7 @@ spec:
 EOF
 
 echo 'Create the sleep service'
-cat <<EOF | $ISTIO_DIR/bin/istioctl kube-inject -f - | kubectl create -f -
+cat <<EOF | $ISTIO_DIR/bin/istioctl kube-inject -f - | kubectl create -n $DEFAULT_ISTIO_NAMESPACE -f -
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -92,8 +92,8 @@ spec:
         imagePullPolicy: IfNotPresent
 EOF
 
-while [ $(kubectl get pods | grep -E 'sleep|httpbin' | grep 'Running' | wc -l) -lt 3 ]; do
-  kubectl get pods
+while [ $(kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE| grep -E 'sleep|httpbin' | grep 'Running' | wc -l) -lt 3 ]; do
+  kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE
   echo 'Sleeping until Running...'
   sleep 4
 done
@@ -102,7 +102,7 @@ done
 # Routing Policy only to V1
 #
 
-cat <<EOF | kubectl apply -f -
+cat <<EOF | kubectl -n $DEFAULT_ISTIO_NAMESPACE apply -f -
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:

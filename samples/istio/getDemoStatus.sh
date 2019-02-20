@@ -1,22 +1,22 @@
 echo ''
 echo 'Checking Virtual Services'
-kubectl get virtualservices
+kubectl get virtualservices -n $DEFAULT_ISTIO_NAMESPACE
 
 echo ''
 echo 'Checking Distination Rules'
-kubectl get destinationrules
+kubectl get destinationrules -n $DEFAULT_ISTIO_NAMESPACE
 
 echo ''
 echo 'Checking Service Entires'
-kubectl get serviceentries
+kubectl get serviceentries -n $DEFAULT_ISTIO_NAMESPACE
 
 echo ''
 echo 'Checking Gateways'
-kubectl get gateway
+kubectl get gateway -n $DEFAULT_ISTIO_NAMESPACE
 
 echo ''
 echo 'Checking Pods'
-kubectl get pods -o wide
+kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE -o wide
 
 export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
 export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}')

@@ -8,10 +8,10 @@ fi
 echo 'Routing to v1 and v2 for Reviews - v2 Reviews will have a delay failure if logged in as Jason'
 
 cat $ISTIO_DIR/samples/bookinfo/networking/virtual-service-all-v1.yaml
-kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-all-v1.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-all-v1.yaml -n $DEFAULT_ISTIO_NAMESPACE
 
 cat $ISTIO_DIR/samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml
-kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml -n $DEFAULT_ISTIO_NAMESPACE
 
 cat $ISTIO_DIR/samples/bookinfo/networking/virtual-service-ratings-test-delay.yaml
-kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-ratings-test-delay.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-ratings-test-delay.yaml -n $DEFAULT_ISTIO_NAMESPACE

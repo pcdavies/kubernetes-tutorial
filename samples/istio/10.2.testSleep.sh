@@ -5,7 +5,7 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
-export SOURCE_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
+export SOURCE_POD=$(kubectl get pod -n $DEFAULT_ISTIO_NAMESPACE -l app=sleep -o jsonpath={.items..metadata.name})
 
 echo 'Connecting to pod....'
 echo 'kubectl exec -it $SOURCE_POD -c sleep sh'
@@ -14,5 +14,5 @@ echo 'Once Connected, Enter this command - NOTE: Failure should occur:'
 echo ' '
 echo 'curl http://httpbin.org/headers -I'
 echo ' '
-kubectl exec -it $SOURCE_POD -c sleep sh
+kubectl exec -it $SOURCE_POD -n $DEFAULT_ISTIO_NAMESPACE -c sleep sh
 

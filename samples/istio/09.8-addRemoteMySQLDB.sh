@@ -43,7 +43,7 @@ echo 'Adding a database for Ratings'
 # kubectl apply -f $ISTIO_DIR/samples/bookinfo/platform/kube/bookinfo-ratings-v2-mysql-vm.yaml
 # Changed above file to below
 
-kubectl apply -f -<<EOF
+kubectl -n $DEFAULT_ISTIO_NAMESPACE apply -f -<<EOF
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -77,8 +77,8 @@ spec:
         - containerPort: 9080
 EOF
 
-while [ $(kubectl get pods | grep -E 'ratings-v2-mysql' | grep 'Running' | wc -l) -lt 1 ]; do
-  kubectl get pods
+while [ $(kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE | grep -E 'ratings-v2-mysql' | grep 'Running' | wc -l) -lt 1 ]; do
+  kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE
   echo 'Sleeping until the ratings-v2 is ready...'
   sleep 4
 done
@@ -87,7 +87,7 @@ echo 'Create the Virtual Service'
 
 # kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-ratings-mysql-vm.yaml
 
-kubectl apply -f -<<EOF
+kubectl -n $DEFAULT_ISTIO_NAMESPACE apply -f -<<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:

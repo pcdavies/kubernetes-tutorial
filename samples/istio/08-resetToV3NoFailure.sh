@@ -6,7 +6,7 @@ fi
 
 echo 'Routing all request to Version 1'
 
-kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-all-v1.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-all-v1.yaml -n $DEFAULT_ISTIO_NAMESPACE
 
-kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-reviews-v3.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-reviews-v3.yaml -n $DEFAULT_ISTIO_NAMESPACE
 

@@ -8,7 +8,7 @@ echo 'Routing all request to Version 1'
 
 cat $ISTIO_DIR/samples/bookinfo/networking/virtual-service-all-v1.yaml
 
-kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-all-v1.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-all-v1.yaml -n $DEFAULT_ISTIO_NAMESPACE
 
 #kubectl get virtualservices -o yaml
 

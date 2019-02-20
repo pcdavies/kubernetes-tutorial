@@ -2,7 +2,7 @@
 
 echo 'Half second timeout on the review page will cause failure Book Details'
 
-cat <<EOF | kubectl apply -f -
+cat <<EOF | kubectl -n $DEFAULT_ISTIO_NAMESPACE apply -f -
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:

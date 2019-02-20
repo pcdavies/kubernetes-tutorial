@@ -5,10 +5,10 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
-export SOURCE_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
+export SOURCE_POD=$(kubectl get pod -n $DEFAULT_ISTIO_NAMESPACE -l app=sleep -o jsonpath={.items..metadata.name})
 
 
-kubectl apply -f - <<EOF
+kubectl -n $DEFAULT_ISTIO_NAMESPACE apply -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:
@@ -46,10 +46,10 @@ EOF
 echo 'Created Google Service Entry and Virtual Services...'
 echo ' '
 echo 'kubectl describe serviceentry google'
-kubectl describe serviceentry google
+kubectl describe serviceentry google -n $DEFAULT_ISTIO_NAMESPACE
 echo ' '
 echo 'kubectl describe virtualservice google'
-kubectl describe virtualservice google
+kubectl describe virtualservice google -n $DEFAULT_ISTIO_NAMESPACE
 echo ' '
 
 echo 'Connecting to pod....'
@@ -58,4 +58,4 @@ echo ' '
 echo 'Once Connected, Enter this command:'
 echo 'curl https://www.google.com'
 echo ' '
-kubectl exec -it $SOURCE_POD -c sleep sh
+kubectl exec -it $SOURCE_POD -n $DEFAULT_ISTIO_NAMESPACE -c sleep sh

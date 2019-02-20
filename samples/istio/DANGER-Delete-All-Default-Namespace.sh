@@ -5,54 +5,53 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
-kubectl get services
-kubectl get virtualservices
-kubectl get destinationrules
-kubectl get gateway
-kubectl get pods
-
-NAMESPACE=default
+kubectl get services -n $DEFAULT_ISTIO_NAMESPACE
+kubectl get virtualservices -n $DEFAULT_ISTIO_NAMESPACE
+kubectl get destinationrules -n $DEFAULT_ISTIO_NAMESPACE
+kubectl get gateway -n $DEFAULT_ISTIO_NAMESPACE
+kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE
 
 export PATH=$ISTIO_DIR/bin:$PATH
 export SCRIPTDIR=$ISTIO_DIR/samples/bookinfo/platform/kube/
 
-echo "using NAMESPACE=${NAMESPACE}"
+echo "using NAMESPACE=${DEFAULT_ISTIO_NAMESPACE}"
 
 protos=( destinationrules virtualservices gateways serviceentries)
 for proto in "${protos[@]}"; do
-  for resource in $(istioctl get -n ${NAMESPACE} $proto | awk 'NR>1{print $1}'); do
-    istioctl delete -n ${NAMESPACE} $proto $resource;
+  for resource in $(istioctl get -n ${DEFAULT_ISTIO_NAMESPACE} $proto | awk 'NR>1{print $1}'); do
+    istioctl delete -n ${DEFAULT_ISTIO_NAMESPACE} $proto $resource;
   done
 done
 #istioctl delete mixer-rule ratings-ratelimit
 
 export OUTPUT=$(mktemp)
 echo "Application cleanup may take up to one minute"
-kubectl delete -n ${NAMESPACE} -f $SCRIPTDIR/bookinfo.yaml > ${OUTPUT} 2>&1
+kubectl delete -n ${DEFAULT_ISTIO_NAMESPACE} -f $SCRIPTDIR/bookinfo.yaml > ${OUTPUT} 2>&1
 ret=$?
 function cleanup() {
   rm -f ${OUTPUT}
 }
 
-kubectl delete service ratings
-kubectl delete service reviews
-kubectl delete service details
-kubectl delete service mongodb
-kubectl delete service mysqldb
+kubectl delete service ratings -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete service reviews -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete service details -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete service mongodb -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete service mysqldb -n $DEFAULT_ISTIO_NAMESPACE
 kubectl delete service mysqldb -n=vm
-kubectl delete service productpage
-kubectl delete service ratings
-kubectl delete service sleep
+kubectl delete service productpage -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete service ratings -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete service sleep -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete service httpbin -n $DEFAULT_ISTIO_NAMESPACE
 
-kubectl delete deployment httpbin-v1
-kubectl delete deployment httpbin-v2
-kubectl delete deployment sleep
-kubectl delete deployment nginx-server
-kubectl delete deployment mongodb-v1
-kubectl delete deployment mysqldb-v1
-kubectl delete deployment ratings-v2
-kubectl delete deployment ratings-v2-mysql
-kubectl delete deployment ratings-v2-mysql-vm
+kubectl delete deployment httpbin-v1 -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete deployment httpbin-v2 -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete deployment sleep -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete deployment nginx-server -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete deployment mongodb-v1 -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete deployment mysqldb-v1 -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete deployment ratings-v2 -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete deployment ratings-v2-mysql -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete deployment ratings-v2-mysql-vm -n $DEFAULT_ISTIO_NAMESPACE
 
 trap cleanup EXIT
 
@@ -75,14 +74,14 @@ sleep 5
 
 echo 'Check to see if all removed:'
 
-kubectl get virtualservices
-kubectl get destinationrules
-kubectl get gateway
-kubectl get pods
-while [ $(kubectl get pods | grep -E 'ratings|reviews|productpage|httpbin|sleep|nginx-server|sleep|mongodb|mysql|NAME' | wc -l) -gt 1 ]; do
-  kubectl get pods
+kubectl get virtualservices -n $DEFAULT_ISTIO_NAMESPACE
+kubectl get destinationrules -n $DEFAULT_ISTIO_NAMESPACE
+kubectl get gateway -n $DEFAULT_ISTIO_NAMESPACE
+kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE
+while [ $(kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE | grep -E 'ratings|reviews|productpage|httpbin|sleep|nginx-server|sleep|mongodb|mysql|NAME' | wc -l) -gt 1 ]; do
+  kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE
   echo 'Sleeping until deleted...'
   sleep 8
 done
 
-kubectl get pods
+kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE

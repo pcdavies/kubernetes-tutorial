@@ -7,5 +7,5 @@ fi
 echo 'Shift All traffic to V3 for Jason'
 
 cat $ISTIO_DIR/samples/bookinfo/networking/virtual-service-reviews-jason-v2-v3.yaml
-kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-reviews-jason-v2-v3.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-reviews-jason-v2-v3.yaml -n $DEFAULT_ISTIO_NAMESPACE
 

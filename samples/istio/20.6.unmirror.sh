@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat <<EOF | kubectl apply -f -
+cat <<EOF | kubectl apply -n $DEFAULT_ISTIO_NAMESPACE -f -
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -16,5 +16,5 @@ spec:
       weight: 100
 EOF
 
-kubectl get virtualServices
+kubectl get virtualServices -n $DEFAULT_ISTIO_NAMESPACE
 

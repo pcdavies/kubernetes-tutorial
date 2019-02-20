@@ -4,11 +4,11 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
-kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-all-v1.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-all-v1.yaml -n $DEFAULT_ISTIO_NAMESPACE
 
 echo 'Route to v2 where there is a 2 second delay'
 
-cat <<EOF | kubectl apply -f -
+cat <<EOF | kubectl  -n $DEFAULT_ISTIO_NAMESPACE apply -f -
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -25,7 +25,7 @@ EOF
 
 echo 'Set a 2 second delay to calls to the rating service'
 
-cat <<EOF | kubectl apply -f -
+cat <<EOF | kubectl  -n $DEFAULT_ISTIO_NAMESPACE apply -f -
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -44,7 +44,7 @@ spec:
         subset: v1
 EOF
 
-kubectl get virtualservices
+kubectl get virtualservices -n $DEFAULT_ISTIO_NAMESPACE
 
 export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
 export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}')

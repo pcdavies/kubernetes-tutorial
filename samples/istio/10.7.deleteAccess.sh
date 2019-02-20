@@ -5,15 +5,15 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
-export SOURCE_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
+export SOURCE_POD=$(kubectl get pod -n $DEFAULT_ISTIO_NAMESPACE -l app=sleep -o jsonpath={.items..metadata.name})
 
-kubectl get serviceentries
-kubectl get virtualservices
+kubectl get serviceentries -n $DEFAULT_ISTIO_NAMESPACE
+kubectl get virtualservices -n $DEFAULT_ISTIO_NAMESPACE
 
-kubectl delete serviceentry httpbin-ext 
-kubectl delete serviceentry google 
-kubectl delete serviceentry winiis-ext
-kubectl delete virtualservice google
+kubectl delete serviceentry httpbin-ext  -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete serviceentry google  -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete serviceentry winiis-ext -n $DEFAULT_ISTIO_NAMESPACE
+kubectl delete virtualservice google -n $DEFAULT_ISTIO_NAMESPACE
 
-kubectl get serviceentries
-kubectl get virtualservices
+kubectl get serviceentries -n $DEFAULT_ISTIO_NAMESPACE
+kubectl get virtualservices -n $DEFAULT_ISTIO_NAMESPACE

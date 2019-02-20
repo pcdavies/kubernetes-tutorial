@@ -20,7 +20,7 @@ fi
 
 echo 'Creating ServiceEntry winiis'
 
-kubectl apply -f - <<EOF
+kubectl -n $DEFAULT_ISTIO_NAMESPACE apply -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:
@@ -39,10 +39,10 @@ EOF
 
 echo 'kubectl describe serviceentry winiis-ext'
 echo ' '
-kubectl describe serviceentry winiis-ext
+kubectl describe serviceentry winiis-ext -n $DEFAULT_ISTIO_NAMESPACE
 echo ' '
 
-export SOURCE_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
+export SOURCE_POD=$(kubectl get pod -n $DEFAULT_ISTIO_NAMESPACE -l app=sleep -o jsonpath={.items..metadata.name})
 
 
 echo '--------------------'
@@ -58,4 +58,4 @@ echo ' '
 echo 'Once Connected, Enter this command:'
 echo 'curl http://'$IIS_HOST':'$IIS_PORT' -I'
 echo ' '
-kubectl exec -it $SOURCE_POD -c sleep sh
+kubectl exec -it $SOURCE_POD -n $DEFAULT_ISTIO_NAMESPACE -c sleep sh

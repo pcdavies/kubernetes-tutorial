@@ -7,19 +7,19 @@ fi
 
 echo 'Adding a database for Ratings'
 
-kubectl apply -f $ISTIO_DIR/samples/bookinfo/platform/kube/bookinfo-db.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/platform/kube/bookinfo-db.yaml -n $DEFAULT_ISTIO_NAMESPACE
 
-while [ $(kubectl get pods | grep -E 'mongodb' | grep 'Running' | wc -l) -lt 1 ]; do
-  kubectl get pods
+while [ $(kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE | grep -E 'mongodb' | grep 'Running' | wc -l) -lt 1 ]; do
+  kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE
   echo 'Sleeping until the Database is ready...'
   sleep 4
 done
 
 
-kubectl apply -f $ISTIO_DIR/samples/bookinfo/platform/kube/bookinfo-ratings-v2.yaml
+kubectl apply -f $ISTIO_DIR/samples/bookinfo/platform/kube/bookinfo-ratings-v2.yaml -n $DEFAULT_ISTIO_NAMESPACE
 
-while [ $(kubectl get pods | grep -E 'ratings-v2' | grep 'Running' | wc -l) -lt 1 ]; do
-  kubectl get pods
+while [ $(kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE | grep -E 'ratings-v2' | grep 'Running' | wc -l) -lt 1 ]; do
+  kubectl get pods -n $DEFAULT_ISTIO_NAMESPACE
   echo 'Sleeping until the ratings-v2 is ready...'
   sleep 4
 done
@@ -30,7 +30,7 @@ echo 'Create the Virtual Service'
 
 # Modified the above virtual service
 
-kubectl apply -f -<<EOF
+kubectl -n $DEFAULT_ISTIO_NAMESPACE apply -f -<<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:

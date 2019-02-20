@@ -5,5 +5,5 @@ if [ "$ISTIO_DIR" = "" ]; then
     exit
 fi
 
-kubectl delete -f $ISTIO_DIR/samples/sleep/sleep.yaml
+kubectl delete -f $ISTIO_DIR/samples/sleep/sleep.yaml -n $DEFAULT_ISTIO_NAMESPACE
 

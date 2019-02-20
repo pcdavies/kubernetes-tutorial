@@ -8,7 +8,7 @@ fi
 
 # kubectl apply -f $ISTIO_DIR/samples/bookinfo/networking/virtual-service-ratings-mysql.yaml
 
-kubectl apply -f -<<EOF
+kubectl -n $DEFAULT_ISTIO_NAMESPACE apply -f -<<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:

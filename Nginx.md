@@ -8,16 +8,16 @@ Note: The following example configuration for Nginx came from [this article by A
 
 Although not required, we are going to create a namespace **nginx** for all applications we create in this example. We'll also create a namespace **ingress** to hold the nginx pods. If you also installed istio following the documentation in this repository, the **default** namespace will be setup to auto install a sidecar for istio. To avoid the sidecar installation for Nginx, we'll use different namespaces. 
 
-- Use the command below to set the **NGINX-APP-NAMESPACE** environment varibable used when deployment the sample applications. 
+- Use the command below to set the **DEFAULT_NAMESPACE** environment varibable used when deployment the sample applications. 
 
     ```
-    export NGINX-APP-NAMESPACE=nginx
+    export DEFAULT_NAMESPACE=nginx
     ```
 
 - Create the namespaces
 
     ```
-    kubectl create namespace $NGINX-APP-NAMESPACE
+    kubectl create namespace $DEFAULT_NAMESPACE
 
     kubectl create namespace ingress
     ``` 
@@ -25,7 +25,7 @@ Although not required, we are going to create a namespace **nginx** for all appl
 - Create the default **App1** and **App2** Deployments
 
     ```yaml
-    kubectl apply -n $NGINX-APP-NAMESPACE -f -<<EOF
+    kubectl apply -n $DEFAULT_NAMESPACE -f -<<EOF
     apiVersion: extensions/v1beta1
     kind: Deployment
     metadata:
@@ -71,7 +71,7 @@ Although not required, we are going to create a namespace **nginx** for all appl
 - Create the App Services
 
     ```yaml
-    kubectl apply -n $NGINX-APP-NAMESPACE -f -<<EOF
+    kubectl apply -n $DEFAULT_NAMESPACE -f -<<EOF
     apiVersion: v1
     kind: Service
     metadata:
@@ -331,7 +331,7 @@ Although not required, we are going to create a namespace **nginx** for all appl
 - Ingress for Apps1/2
 
     ```yaml
-    kubectl apply -n $NGINX-APP-NAMESPACE -f -<<EOF
+    kubectl apply -n $DEFAULT_NAMESPACE -f -<<EOF
     apiVersion: extensions/v1beta1
     kind: Ingress
     metadata:
@@ -357,7 +357,7 @@ Although not required, we are going to create a namespace **nginx** for all appl
 - Nginx Ingress Service
 
     ```yaml
-    kubectl apply -n= $NGINX-APP-NAMESPACE -f -<<EOF
+    kubectl apply -n= $DEFAULT_NAMESPACE -f -<<EOF
     apiVersion: v1
     kind: Service
     metadata:

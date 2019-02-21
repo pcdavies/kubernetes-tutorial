@@ -471,3 +471,9 @@ spec:
         path: /iis
 EOF
 ```
+
+- You can access the IIS server from this url - note the trailing backslash `\` 
+
+    ```
+    http://test.example.com/iis/
+    ```

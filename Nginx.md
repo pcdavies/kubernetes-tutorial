@@ -390,3 +390,62 @@ EOF
     http://test.example.com:30000/app2
     http://test.example.com:32000/nginx_status
     ```
+
+### **Step 6**: Optional Configure Windows IIS Server and access from Nginx
+
+Note: This example assumes that you are running Windows 1809/2019 and you have tained the Windows node as documented in the Windows Node configuration section of this documentation
+
+- Create a windows namespace to hold all windows Pods
+
+    ```
+    kubectl create namespace windows
+    ```
+
+- Deploy Windows IIS Server
+
+```yaml
+kubectl apply -n windows -f -<<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iis-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iis
+  template:
+    metadata:
+      labels:
+        app: iis
+    spec:
+      containers:
+      - name: iis
+        image: mcr.microsoft.com/windows/servercore/iis:windowsservercore-ltsc2019
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: 2
+        ports:
+        - containerPort: 80
+      nodeSelector:
+        beta.kubernetes.io/os: windows
+      tolerations:
+      - key: "opsys-taint"
+        operator: Equal
+        value: "windows"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: iis
+  name: iis-svc
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+  selector:
+    app: iis
+EOF
+```

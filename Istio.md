@@ -73,7 +73,7 @@
 
 - The instructions summarized below can be found [Here](https://istio.io/docs/examples/bookinfo/)
 
-- Since "Automatic Sidecar Injection" is possible, use this option
+- Since "Automatic Sidecar Injection" is possible, use this options documented below. As an additional Note: Notice that we are setting istio up to perform auto sidecar injection on the **default** namespace. You can use another namespace in place of default, however, when deploying the applications, services, etc. for the booking example, you would be required to explicitly specify the namespace you created. The tasks documented below will use the **default** namespace. However, after completing this tutorial, you may want to explore the [./samples/istio](./samples/istio) folder in this repository for examples of how to use a different namespace. 
 
     Run all commands a the **$** prompt:
     ```

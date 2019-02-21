@@ -99,6 +99,32 @@ spec:
 EOF
 ```
 
+- Ingress for Apps1/2
+
+```yaml
+kubectl apply -n $DEFAULT_NAMESPACE -f -<<EOF
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: app-ingress
+spec:
+  rules:
+  - host: nginx.stormwind.local
+    http:
+      paths:
+      - backend:
+          serviceName: appsvc1
+          servicePort: 80
+        path: /app1
+      - backend:
+          serviceName: appsvc2
+          servicePort: 80
+        path: /app2
+EOF
+```
+
 ### ***Step 2***: Create the default backend that will return errors when needed
 
 - Create the **backend** deployment
@@ -331,29 +357,29 @@ EOF
 
 - Ingress for Apps1/2
 
-    ```yaml
-    kubectl apply -n $DEFAULT_NAMESPACE -f -<<EOF
-    apiVersion: extensions/v1beta1
-    kind: Ingress
-    metadata:
-    annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /
-    name: app-ingress
-    spec:
-    rules:
-    - host: test.example.com
-        http:
-        paths:
-        - backend:
-            serviceName: appsvc1
-            servicePort: 80
-            path: /app1
-        - backend:
-            serviceName: appsvc2
-            servicePort: 80
-            path: /app2
-    EOF
-    ```
+```yaml
+kubectl apply -n $DEFAULT_NAMESPACE -f -<<EOF
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: app-ingress
+spec:
+  rules:
+  - host: nginx.stormwind.local
+    http:
+      paths:
+      - backend:
+          serviceName: appsvc1
+          servicePort: 80
+        path: /app1
+      - backend:
+          serviceName: appsvc2
+          servicePort: 80
+        path: /app2
+EOF
+```
 
 - Nginx Ingress Service
 

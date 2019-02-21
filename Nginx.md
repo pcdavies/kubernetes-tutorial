@@ -449,3 +449,25 @@ spec:
     app: iis
 EOF
 ```
+
+- Create the Access to the Service from Nginx
+
+```yaml
+kubectl apply -n windows -f -<<EOF
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: iis-ingress
+spec:
+  rules:
+  - host: forge.stormwind.local
+    http:
+      paths:
+      - backend:
+          serviceName: iis-svc
+          servicePort: 80
+        path: /iis
+EOF
+```

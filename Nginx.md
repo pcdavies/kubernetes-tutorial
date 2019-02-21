@@ -129,279 +129,253 @@ EOF
 
 - Create the **backend** deployment
 
-    ```yaml
-    kubectl apply -n ingress -f -<<EOF
-    apiVersion: extensions/v1beta1
-    kind: Deployment
-    metadata:a
-    name: default-backend
+```yaml
+kubectl apply -n ingress -f -<<EOF
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: default-backend
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: default-backend
     spec:
-    replicas: 2
-    template:
-        metadata:
-        labels:
-            app: default-backend
-        spec:
-        terminationGracePeriodSeconds: 60
-        containers:
-        - name: default-backend
-            image: gcr.io/google_containers/defaultbackend:1.0
-            livenessProbe:
-            httpGet:
-                path: /healthz
-                port: 8080
-                scheme: HTTP
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-            ports:
-            - containerPort: 8080
-            resources:
-            limits:
-                cpu: 10m
-                memory: 20Mi
-            requests:
-                cpu: 10m
-                memory: 20Mi
-    EOF
-    ```
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: default-backend
+        image: gcr.io/google_containers/defaultbackend:1.0
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 10m
+            memory: 20Mi
+          requests:
+            cpu: 10m
+            memory: 20Mi
+EOF
+```
 
 - Create the **backend** Service
 
-    ```yaml
-    kubectl apply -n ingress -f -<<EOF
-    apiVersion: v1
-    kind: Service
-    metadata:
-    name: default-backend
-    spec:
-    ports:
-    - port: 80
-        protocol: TCP
-        targetPort: 8080
-    selector:
-        app: default-backend
-    EOF
-    ```
+```yaml
+kubectl apply -n ingress -f -<<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: default-backend
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: default-backend
+EOF
+```
 
 ### **Step 3**: Create the nginx ConfigMap and RBAC
 
 - ConfigMap
 
-    ```yaml
-    kubectl apply -n ingress -f -<<EOF
-    apiVersion: v1
-    kind: ConfigMap
-    metadata:
-    name: nginx-ingress-controller-conf
-    labels:
-        app: nginx-ingress-lb
-    data:
-    enable-vts-status: 'true'
-    EOF
-    ```
+```yaml
+kubectl apply -n ingress -f -<<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-ingress-controller-conf
+  labels:
+    app: nginx-ingress-lb
+data:
+  enable-vts-status: 'true'
+EOF
+```
 
 - ClusterRole and ClusterRoleBinding
 
-    ```yaml
-    kubectl apply -n ingress -f -<<EOF
-    apiVersion: v1
-    kind: ServiceAccount
-    metadata:
-    name: nginx
-    ---
-    kind: ClusterRole
-    apiVersion: rbac.authorization.k8s.io/v1beta1
-    metadata:
-    name: nginx-role
-    rules:
-    - apiGroups:
-    - ""
-    resources:
-    - configmaps
-    - endpoints
-    - nodes
-    - pods
-    - secrets
-    verbs:
-    - list
-    - watch
-    - apiGroups:
-    - ""
-    resources:
-    - nodes
-    verbs:
-    - get
-    - apiGroups:
-    - ""
-    resources:
-    - services
-    verbs:
-    - get
-    - list
-    - update
-    - watch
-    - apiGroups:
-    - extensions
-    resources:
-    - ingresses
-    verbs:
-    - get
-    - list
-    - watch
-    - apiGroups:
-    - ""
-    resources:
-    - events
-    verbs:
-    - create
-    - patch
-    - apiGroups:
-    - extensions
-    resources:
-    - ingresses/status
-    verbs:
-    - update
-    ---
-    kind: ClusterRoleBinding
-    apiVersion: rbac.authorization.k8s.io/v1beta1
-    metadata:
-    name: nginx-role
-    roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: ClusterRole
-    name: nginx-role
-    subjects:
-    - kind: ServiceAccount
-    name: nginx
-    namespace: ingress
-    EOF
-    ```
+```yaml
+kubectl apply -n ingress -f -<<EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nginx
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: nginx-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - endpoints
+  - nodes
+  - pods
+  - secrets
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses/status
+  verbs:
+  - update
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: nginx-role
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nginx-role
+subjects:
+- kind: ServiceAccount
+  name: nginx
+  namespace: ingress
+EOF
+```
 
 ### **Step 4**: Create the Nginx controller
 
 - Nginx Ingress Controller
 
-    ```yaml
-    kubectl apply -n ingress -f -<<EOF
-    apiVersion: extensions/v1beta1
-    kind: Deployment
+```yaml
+kubectl apply -n ingress -f -<<EOF
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-ingress-controller
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  template:
     metadata:
-    name: nginx-ingress-controller
+      labels:
+        app: nginx-ingress-lb
     spec:
-    replicas: 1
-    revisionHistoryLimit: 3
-    template:
-        metadata:
-        labels:
-            app: nginx-ingress-lb
-        spec:
-        terminationGracePeriodSeconds: 60
-        serviceAccount: nginx
-        containers:
-            - name: nginx-ingress-controller
-            image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.9.0
-            imagePullPolicy: Always
-            readinessProbe:
-                httpGet:
-                path: /healthz
-                port: 10254
-                scheme: HTTP
-            livenessProbe:
-                httpGet:
-                path: /healthz
-                port: 10254
-                scheme: HTTP
-                initialDelaySeconds: 10
-                timeoutSeconds: 5
-            args:
-                - /nginx-ingress-controller
-                - --default-backend-service=\$(POD_NAMESPACE)/default-backend
-                - --configmap=\$(POD_NAMESPACE)/nginx-ingress-controller-conf
-                - --v=2
-            env:
-                - name: POD_NAME
-                valueFrom:
-                    fieldRef:
-                    fieldPath: metadata.name
-                - name: POD_NAMESPACE
-                valueFrom:
-                    fieldRef:
-                    fieldPath: metadata.namespace
-            ports:
-                - containerPort: 80
-                - containerPort: 18080
-    EOF
-    ```
+      terminationGracePeriodSeconds: 60
+      serviceAccount: nginx
+      containers:
+        - name: nginx-ingress-controller
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.9.0
+          imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          args:
+            - /nginx-ingress-controller
+            - --default-backend-service=\$(POD_NAMESPACE)/default-backend
+            - --configmap=\$(POD_NAMESPACE)/nginx-ingress-controller-conf
+            - --v=2
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - containerPort: 80
+            - containerPort: 18080
+EOF
+```
 
 - Ingress for nginx
 
-    ```yaml
-    kubectl apply -n ingress -f -<<EOF
-    apiVersion: extensions/v1beta1
-    kind: Ingress
-    metadata:
-    name: nginx-ingress
-    spec:
-    rules:
-    - host: test.example.com
-        http:
-        paths:
-        - backend:
-            serviceName: nginx-ingress
-            servicePort: 18080
-            path: /nginx_status
-    EOF
-    ```
-
-### **Step 5**: Create the App Ingress and Service
-
-- Ingress for Apps1/2
-
 ```yaml
-kubectl apply -n $DEFAULT_NAMESPACE -f -<<EOF
+kubectl apply -n ingress -f -<<EOF
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-  name: app-ingress
+  name: nginx-ingress
 spec:
   rules:
   - host: nginx.stormwind.local
     http:
       paths:
       - backend:
-          serviceName: appsvc1
-          servicePort: 80
-        path: /app1
-      - backend:
-          serviceName: appsvc2
-          servicePort: 80
-        path: /app2
+          serviceName: nginx-ingress
+          servicePort: 18080
+        path: /nginx_status
 EOF
 ```
 
+### **Step 5**: Create the Ingress and Service
+
 - Nginx Ingress Service
 
-    ```yaml
-    kubectl apply -n= $DEFAULT_NAMESPACE -f -<<EOF
-    apiVersion: v1
-    kind: Service
-    metadata:
-    name: nginx-ingress
-    spec:
-    type: NodePort
-    ports:
-        - port: 80
-        nodePort: 30000
-        name: http
-        - port: 18080
-        nodePort: 32000
-        name: http-mgmt
-    selector:
-        app: nginx-ingress-lb
-    EOF
-    ```
+```yaml
+kubectl apply -n ingress -f -<<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-ingress
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      nodePort: 30000
+      name: http
+    - port: 18080
+      nodePort: 32000
+      name: http-mgmt
+  selector:
+    app: nginx-ingress-lb
+EOF
+```
 
 - Configure Port Forwarding
 

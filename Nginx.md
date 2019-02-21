@@ -66,6 +66,7 @@ Although not required, we are going to create a namespace **nginx** for all appl
             ports:
             - containerPort: 80
     EOF
+    
     ```
 
 - Create the App Services

@@ -71,33 +71,33 @@ EOF
 
 - Create the App Services
 
-    ```yaml
-    kubectl apply -n $DEFAULT_NAMESPACE -f -<<EOF
-    apiVersion: v1
-    kind: Service
-    metadata:
-    name: appsvc1
-    spec:
-    ports:
-    - port: 80
-        protocol: TCP
-        targetPort: 80
-    selector:
-        app: app1
-    ---
-    apiVersion: v1
-    kind: Service
-    metadata:
-    name: appsvc2
-    spec:
-    ports:
-    - port: 80
-        protocol: TCP
-        targetPort: 80
-    selector:
-        app: app2
-    EOF
-    ```
+```yaml
+kubectl apply -n $DEFAULT_NAMESPACE -f -<<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: appsvc1
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: app1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: appsvc2
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: app2
+EOF
+```
 
 ### ***Step 2***: Create the default backend that will return errors when needed
 

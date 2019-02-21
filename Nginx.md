@@ -111,7 +111,7 @@ metadata:
   name: app-ingress
 spec:
   rules:
-  - host: nginx.stormwind.local
+  - host: test.example.com
     http:
       paths:
       - backend:
@@ -343,7 +343,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.stormwind.local
+  - host: test.example.com
     http:
       paths:
       - backend:
@@ -462,7 +462,7 @@ metadata:
   name: iis-ingress
 spec:
   rules:
-  - host: forge.stormwind.local
+  - host: test.example.com
     http:
       paths:
       - backend:

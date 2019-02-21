@@ -24,50 +24,49 @@ Although not required, we are going to create a namespace **nginx** for all appl
 
 - Create the default **App1** and **App2** Deployments
 
-    ```yaml
-    kubectl apply -n $DEFAULT_NAMESPACE -f -<<EOF
-    apiVersion: extensions/v1beta1
-    kind: Deployment
+```yaml
+kubectl apply -n $DEFAULT_NAMESPACE -f -<<EOF
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+name: app1
+spec:
+replicas: 2
+template:
     metadata:
-    name: app1
+    labels:
+        app: app1
     spec:
-    replicas: 2
-    template:
-        metadata:
-        labels:
-            app: app1
-        spec:
-        containers:
-        - name: app1
-            image: dockersamples/static-site
-            env:
-            - name: AUTHOR
-            value: app1
-            ports:
-            - containerPort: 80
-    ---
-    apiVersion: extensions/v1beta1
-    kind: Deployment
+    containers:
+    - name: app1
+        image: dockersamples/static-site
+        env:
+        - name: AUTHOR
+        value: app1
+        ports:
+        - containerPort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+name: app2
+spec:
+replicas: 2
+template:
     metadata:
-    name: app2
+    labels:
+        app: app2
     spec:
-    replicas: 2
-    template:
-        metadata:
-        labels:
-            app: app2
-        spec:
-        containers:
-        - name: app2
-            image: dockersamples/static-site
-            env:
-            - name: AUTHOR
-            value: app2
-            ports:
-            - containerPort: 80
-    EOF
-    
-    ```
+    containers:
+    - name: app2
+        image: dockersamples/static-site
+        env:
+        - name: AUTHOR
+        value: app2
+        ports:
+        - containerPort: 80
+EOF
+```
 
 - Create the App Services
 

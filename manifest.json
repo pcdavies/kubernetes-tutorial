@@ -7,7 +7,7 @@
             {
                 "number": "100",
                 "filename": "CentOS.md",
-                "title": "CentOS Master and Worker Configuration",
+                "title": "1-CentOS Master and Worker Install",
                 "description": "Basic set up for the CentOS Master and Worker Nodes",
                 "labels": {
                     "version": "Self-Service"
@@ -16,7 +16,7 @@
             {
                 "number": "200",
                 "filename": "KubeNetConfig.md",
-                "title": "Configure Kubernetes on the Master and Worker Node",
+                "title": "2-Kubernetes Configuration",
                 "description": "Setup and initialize Kubernetes on the Master and Worker nodes",
                 "labels": {
                     "version": "Self-Service"
@@ -25,7 +25,7 @@
             {
                 "number": "300",
                 "filename": "WindowsNode.md",
-                "title": "Optional setup of Windows Worker Node",
+                "title": "3-Optional Windows Worker Install",
                 "description": "Install and configure a Windows 1809 Worker Node",
                 "labels": {
                     "version": "Self-Service"
@@ -34,7 +34,7 @@
             {
                 "number": "400",
                 "filename": "Nginx.md",
-                "title": "Nginx Ingress Controller",
+                "title": "4-Nginx Ingress Setup",
                 "description": "Configure Nginx as the Ingress Controller",
                 "labels": {
                     "version": "Self-Service"
@@ -43,7 +43,7 @@
             {
                 "number": "500",
                 "filename": "Istio.md",
-                "title": "Optionally Configure the Istio Service Mesh",
+                "title": "5-Optional Istio Setup",
                 "description": "Optionally configure the Istio Service Mesh",
                 "labels": {
                     "version": "Self-Service"

@@ -2,9 +2,9 @@
 
 In this tutorial we will install 2 VM Images. One will server as the Kubernetes master, and the other a Kubernetes Worker Node. We'll configure Docker and Kubernetes on both Images. 
 
-## Create the Master and Worker Nodes 
+Note: In this example we will configure all nodes using a single NAT network.
 
-Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommended to set up a second network, and assign stattic IP addressed - e.g. 172.31.x.x. However, in this example, we're are going to just use a single NAT network, which simplifies the configuration and works well.
+## Create the Master and Worker Nodes 
 
 ### **Step 1**: Download and setup CentOS 7
 

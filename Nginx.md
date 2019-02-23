@@ -4,7 +4,7 @@ Note: The following example configuration for Nginx came from [this article by A
 
 ## Create Sample Applications
 
-### ***Step 1***: Create Namespace
+### **Step 1**: Create Namespace
 
 Although not required, we are going to create a namespace **nginx** for all applications we create in this example. We'll also create a namespace **ingress** to hold the nginx pods. If you also installed istio following the documentation in this repository, the **default** namespace will be setup to auto install a sidecar for istio. To avoid the sidecar installation for Nginx, we'll use different namespaces. 
 
@@ -125,7 +125,7 @@ spec:
 EOF
 ```
 
-### ***Step 2***: Create the default backend that will return errors when needed
+### **Step 2**: Create the default backend that can return errors
 
 - Create the **backend** deployment
 

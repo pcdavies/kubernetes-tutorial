@@ -1,13 +1,16 @@
-# kubernetes-tutorial
+# Install and Configure CentOS 7 Nodes
 
 In this tutorial we will install 2 VM Images. One will server as the Kubernetes master, and the other a Kubernetes Worker Node. We'll configure Docker and Kubernetes on both Images. 
 
-## Install the Master and Node 
+## Create the Master and Worker Nodes 
 
 Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommended to set up a second network, and assign stattic IP addressed - e.g. 172.31.x.x. However, in this example, we're are going to just use a single NAT network, which simplifies the configuration and works well.
 
-### Download and setup CentOS 7
+### **Step 1**: Download and setup CentOS 7
+
  - Download the DVD ISO from [CentOS Download Center](https://www.centos.org/download/)
+
+### **Step 2**: Create the image(s)
 
  - Create a `kmaster` and `knode1`
 
@@ -24,6 +27,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 - Continue
 
      ![](images/CentOS/img003.png)
+
+### **Step 3**: Customize the settings
 
 - Select the **Customize Settings** option
 
@@ -57,6 +62,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 
      ![](images/CentOS/img011.png)
 
+### **Step 4**: Select Gnome and System Admin Tools
+
 - Choose **Gnome** and **System and Administration Tools**
 
      ![](images/CentOS/img012.png)
@@ -68,6 +75,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 - Click on Done
 
      ![](images/CentOS/img014.png)
+
+### **Step 5**: Set the Hostname and Network
 
 - Select the **Network and Host Name**
 
@@ -89,6 +98,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 
      ![](images/CentOS/img017.png)
 
+### **Step 6**: Create the User
+
 - Select the Create User option
 
 - Create a username and password. I also made this user an **administrator**
@@ -102,6 +113,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 - Click on **Finish Configuration**
 
      ![](images/CentOS/img022.png)
+
+### **Step 7**: Set Hostname, Turn Swap off, etc.
 
  - Start a terminal window by right clicking on the **Desktop**. Once a terminal windows is open, enter the following command
 
@@ -136,6 +149,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
     ```
 
     ![](images/CentOS/img030.png)
+
+### **Step 8**: Check network connection
 
 - Make sure your network connect is on - use **Network Setting console**
 
@@ -174,6 +189,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
     EOF
     ```
 
+### **Step 9**: Suggested Reboot
+
 -   It's recommended to reboot the kmaster to knode1 images. Make sure all setting have taken effect after rebooting
 
 - Once restarted, connect back into the image(s) and edit the host files in both images
@@ -185,6 +202,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 
     ![](images/CentOS/img034.png)
  
+### **Step 10**: Install Kubernetes and Docker
+
 - Setup yum to install kubernetes - Note, you will run the following commands at the **#** prompt until instructed otherwise:
 
     ```bash
@@ -222,7 +241,9 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
 
 - ***Reboot*** the image(s)
 
-### **Master only** install
+## Master Node Setup Only
+
+### **Step 11**: Initialize the Kubernetes Network on the Master Node
 
 - Setup Kubernetes - Run the commands as `sudo su` at the **#** prompt
 
@@ -249,6 +270,8 @@ Note: when configuing the image with VirtualBox or VMWare Fusion, it is recommen
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
     ```
+
+### **Step 12**: Wait for the Pods to initialize
 
 - Wait for all Pods to show running, with the exception of the **coredns** pods which will change to running later when the flannel network is configured. 
 

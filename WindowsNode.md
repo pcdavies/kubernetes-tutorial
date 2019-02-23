@@ -2,9 +2,9 @@
 
 ## Create the windows image
 
-### ***Step 1***: Download Windows server 1809
+### **Step 1**: Download Windows server 1809
 
-### ***Step 2***: Install the Windows Image: 
+### **Step 2**: Install the Windows Image: 
 
 - Using VMWare Fusion, install widnows server 1809 image - the following screen shots will provide an overview the options I selected to install the image
 
@@ -32,7 +32,7 @@
      ![](images/windowsnode/img16.png)
      
 
-### ***Step 3***:
+### **Step 3**: Configure Windows Image
 
 - From the Administrative Console, enter powershell, disable the firewall and Disable IPV6 on all network interfaces - Note: Most of the following is found in the [Microsoft Documentation](https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/joining-windows-workers) for Kubernetes
 
@@ -53,6 +53,8 @@
 
      ![](images/windowsnode/img22.png)
 
+### **Step 4**: Enable Remote Desktop and a Shared Drive
+
 - **Exit Powershell**, then Enable Remote Desktop
 
     ```
@@ -70,6 +72,7 @@
     ```
     powershell
     ```
+### **Step 5**: Install Docker
 
 - Install Docker Module - Anser yes when prompted
 
@@ -111,6 +114,8 @@
     Start-Service docker
     ```
 
+### **Step 6**: Configure required docker images
+
 - Pull the docker image for Windows Server 1809
 
     ```
@@ -128,6 +133,8 @@
     ```
     docker run -it --rm microsoft/nanoserver:latest
     ```
+
+### **Step 7**: Get the required Kubernetes Software Configured
 
 - Make a c:\k directory
 
@@ -189,7 +196,7 @@
     rm -recurse -force master,master.zip
     ```
 
-### **Step 4**: Join knode **(Windows)** to kmaster
+### **Step 8**: Join knode **(Windows)** to kmaster
 
 - Join the Master
 
@@ -217,6 +224,8 @@
     ```
     kubectl describe node knodew
     ```
+
+### **Step 9**: Test a sample Windows Image
 
 - Pull the following image down to the Windows node, as it will be used shortly
 

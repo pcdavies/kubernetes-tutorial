@@ -1,0 +1,54 @@
+{
+    "workshop": {
+        "title": "Kubernetes Configuration",
+        "description": "Includes Options Windows Node setup, and also includes Istio and/or Nginx Ingress configuration",
+        "theme": "default",
+        "labs": [
+            {
+                "number": "100",
+                "filename": "CentOS.md",
+                "title": "CentOS Master and Worker Configuration",
+                "description": "Basic set up for the CentOS Master and Worker Nodes",
+                "labels": {
+                    "version": "Self-Service"
+                }
+            },
+            {
+                "number": "200",
+                "filename": "KubeNetConfig.md",
+                "title": "Configure Kubernetes on the Master and Worker Node",
+                "description": "Setup and initialize Kubernetes on the Master and Worker nodes",
+                "labels": {
+                    "version": "Self-Service"
+                }
+            },
+            {
+                "number": "300",
+                "filename": "WindowsNode.md",
+                "title": "Optional setup of Windows Worker Node",
+                "description": "Install and configure a Windows 1809 Worker Node",
+                "labels": {
+                    "version": "Self-Service"
+                }
+            },
+            {
+                "number": "400",
+                "filename": "Nginx.md",
+                "title": "Nginx Ingress Controller",
+                "description": "Configure Nginx as the Ingress Controller",
+                "labels": {
+                    "version": "Self-Service"
+                }
+            },
+            {
+                "number": "500",
+                "filename": "Istio.md",
+                "title": "Optionally Configure the Istio Service Mesh",
+                "description": "Optionally configure the Istio Service Mesh",
+                "labels": {
+                    "version": "Self-Service"
+                }
+            }
+        ]
+    }
+}

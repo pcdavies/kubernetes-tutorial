@@ -1,11 +1,11 @@
 
-# Setup Kubernetes
+# Configure Kubernetes
 
-If you plan on including Windows nodes, you need to set up the Flannel Network and Proxy configuration using **Host Gateway Mode**, as apposed to **VXLAN** Mode. Choose the correct version of **Step 1** based on the desire to include Windows nodes.
+If you plan on including Windows nodes, you need to set up the Flannel Network and Proxy configuration using **Host Gateway Mode**, as apposed to **VXLAN**. Choose the correct version of **Step 1** based on the desire to include Windows nodes.
 
-## Flannel Install
+## Flannel Network Configuration
 
-### ***Step 1***: With ***No Windows Nodes*** - Install the Flannel Network
+### **Step 1 -** ***No Windows Nodes***: Install the Flannel Network
 
 The following is to be performed on the **kmaster** image
 
@@ -21,7 +21,7 @@ The following is to be performed on the **kmaster** image
 
 - Go to **Step 2**
 
-### ***Step 1***: With the potential of having a ***Windows Node(s)*** - Install the Flannel Network as follows:
+### **Step 1 -** ***Potential Windows Nodes***: Install the Flannel Network
 
 - Patch the linux kube-proxy DaemonSet to target Linux only. 
 
@@ -177,9 +177,7 @@ The following is to be performed on the **kmaster** image
 
     ![](images/kubenetconfig/img43.png)
 
-## Join the Node
-
-### **Step 3**: Join the knode1 **(Linux)** node to the kmaster
+### **Step 3**: Join knode1 **(Linux)** node to the kmaster
 
 ***Note:*** The following step's command must be run only on the "Node"
 
@@ -195,7 +193,7 @@ The following is to be performed on the **kmaster** image
 
     ![](images/kubenetconfig/img224.png)
     
-### **Step 3**: Install a test application
+### **Step 4**: Install and test an application
 
 ***Note:*** The commands in this step are run on the "Master"
 

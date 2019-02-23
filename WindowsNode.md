@@ -4,6 +4,8 @@
 
 ### **Step 1**: Download Windows server 1809
 
+- Search for Windows 1809 server edition trial, or use an internal ISO
+
 ### **Step 2**: Install the Windows Image: 
 
 - Using VMWare Fusion, install widnows server 1809 image - the following screen shots will provide an overview the options I selected to install the image

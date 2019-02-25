@@ -878,3 +878,226 @@ spec:
 ```
 
 ![](./images/demos/img013.png)
+
+## Mirroring Demo
+
+### 20.2 Deploy Mirroring Demo Apps
+
+- httpbin v1
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: httpbin-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: httpbin
+        version: v1
+    spec:
+      containers:
+      - image: docker.io/kennethreitz/httpbin
+        imagePullPolicy: IfNotPresent
+        name: httpbin
+        command: ["gunicorn", "--access-logfile", "-", "-b", "0.0.0.0:8080", "httpbin:app"]
+        ports:
+        - containerPort: 8080
+```
+
+- httpbin v2
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: httpbin-v2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: httpbin
+        version: v2
+    spec:
+      containers:
+      - image: docker.io/kennethreitz/httpbin
+        imagePullPolicy: IfNotPresent
+        name: httpbin
+        version: v2
+    spec:
+      containers:
+      - image: docker.io/kennethreitz/httpbin
+        imagePullPolicy: IfNotPresent
+        name: httpbin
+        command: ["gunicorn", "--access-logfile", "-", "-b", "0.0.0.0:8080", "httpbin:app"]
+        ports:
+        - containerPort: 8080
+```
+
+- V1 Service
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  labels:
+    app: httpbin
+spec:
+  ports:
+  - name: http
+    port: 8080
+  selector:
+    app: httpbin
+```
+
+- Sleep Deployment
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sleep
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sleep
+    spec:
+      containers:
+      - name: sleep
+        image: tutum/curl
+        command: ["/bin/sleep","infinity"]
+        imagePullPolicy: IfNotPresent
+```
+
+- V1 Virtual Service and Destination Rules
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpbin
+spec:
+  hosts:
+    - httpbin
+  http:
+  - route:
+    - destination:
+        host: httpbin
+        subset: v1
+      weight: 100
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: httpbin
+spec:
+  host: httpbin
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+```
+
+### 20.3 Send data to the V1 Service
+
+- Execute:
+
+```bash
+export SLEEP_POD=$(kubectl get pod -n $DEFAULT_ISTIO_NAMESPACE -l app=sleep -o jsonpath={.items..metadata.name})
+echo ' '
+echo 'Calling URL from pod 4 times - curl  http://httpbin:8080/headers....'
+# kubectl exec -it $SLEEP_POD -c sleep -- sh -c 'curl  http://httpbin:8080/headers'
+kubectl exec $SLEEP_POD -n $DEFAULT_ISTIO_NAMESPACE -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null 2>&1
+kubectl exec $SLEEP_POD -n $DEFAULT_ISTIO_NAMESPACE -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null 2>&1
+kubectl exec $SLEEP_POD -n $DEFAULT_ISTIO_NAMESPACE -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null 2>&1
+kubectl exec $SLEEP_POD -n $DEFAULT_ISTIO_NAMESPACE -c sleep -- sh -c 'curl  http://httpbin:8080/headers' > /dev/null 2>&1
+
+echo ' '
+echo 'V1 Logs without mirroring:'
+export V1_POD=$(kubectl get pod -n $DEFAULT_ISTIO_NAMESPACE -l app=httpbin,version=v1 -o jsonpath={.items..metadata.name})
+
+echo '$ kubectl logs '"$V1_POD"
+kubectl logs $V1_POD -n $DEFAULT_ISTIO_NAMESPACE -c httpbin | grep GET
+CNT=$(kubectl logs $V1_POD -n $DEFAULT_ISTIO_NAMESPACE -c httpbin | grep GET | wc -l)
+echo 'Returned '"$CNT"' Records'
+
+echo ' '
+echo 'V2 Logs without mirroring:'
+export V2_POD=$(kubectl get pod -n $DEFAULT_ISTIO_NAMESPACE -l app=httpbin,version=v2 -o jsonpath={.items..metadata.name})
+echo '$ kubectl logs '"$V2_POD"
+kubectl logs $V2_POD -n $DEFAULT_ISTIO_NAMESPACE -c httpbin | grep GET
+CNT=$(kubectl logs $V2_POD -n $DEFAULT_ISTIO_NAMESPACE -c httpbin | grep GET | wc -l)
+echo 'Returned '"$CNT"' Records'
+echo ' '
+```
+
+- Result:
+
+```bash
+V1 Logs without mirroring:
+$ kubectl logs httpbin-v1-547db8867f-2vblb
+127.0.0.1 - - [25/Feb/2019:18:29:58 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:29:58 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:29:59 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:29:59 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+Returned        4 Records
+ 
+V2 Logs without mirroring:
+$ kubectl logs httpbin-v2-696b7b59c5-sq8tg
+Returned        0 Records
+```
+
+### 20.4 Mirror V1 to V2
+
+```bash
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpbin
+spec:
+  hosts:
+    - httpbin
+  http:
+  - route:
+    - destination:
+        host: httpbin
+        subset: v1
+      weight: 100
+    mirror:
+      host: httpbin
+      subset: v2
+```
+
+### Re-run 20.3 Send data to the V1 Service
+
+- Results:
+
+```bash
+$ kubectl logs httpbin-v1-547db8867f-2vblb
+127.0.0.1 - - [25/Feb/2019:18:29:58 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:29:58 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:29:59 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:29:59 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:30:33 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:30:34 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:30:34 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:30:34 +0000] "GET /headers HTTP/1.1" 200 241 "-" "curl/7.35.0"
+Returned       8 Records
+ 
+V2 Logs after mirroring:
+$ kubectl logs httpbin-v2-696b7b59c5-sq8tg
+127.0.0.1 - - [25/Feb/2019:18:31:19 +0000] "GET /headers HTTP/1.1" 200 281 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:31:19 +0000] "GET /headers HTTP/1.1" 200 281 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:31:19 +0000] "GET /headers HTTP/1.1" 200 281 "-" "curl/7.35.0"
+127.0.0.1 - - [25/Feb/2019:18:31:20 +0000] "GET /headers HTTP/1.1" 200 281 "-" "curl/7.35.0"
+Returned        4 Records
+```

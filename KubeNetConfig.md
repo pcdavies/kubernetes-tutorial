@@ -177,6 +177,8 @@ The following is to be performed on the **kmaster** image
 
     ![](images/kubenetconfig/img43.png)
 
+## Join Node and Test Application
+
 ### **Step 3**: Join knode1 **(Linux)** node to the kmaster
 
 ***Note:*** The following step's command must be run only on the "Node"

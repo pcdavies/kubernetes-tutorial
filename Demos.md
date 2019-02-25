@@ -1,15 +1,12 @@
 # Demos
 
-## Booking Application
-
 Find info about the Booking Application at the [Istio.or Website](https://preliminary.istio.io/docs/examples/bookinfo/)
 
 ![](./images/demos/img001.png)
 
+## 01 Build Booking Application
 
-### 01 - Deploy the Booking Application
-
-### Detail Service and Deployment:
+### Detail Service
 
 ```yaml
 ##################################################################################################
@@ -332,8 +329,9 @@ spec:
 
 ![](./images/demos/img002.png)
 
+## 02 - Route to Reviews Version 1
 
-### 02 - Route to Reviews Version 1
+### Create Virtual Services
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -390,7 +388,9 @@ spec:
 ```
 ![](./images/demos/img003.png)
 
-### 03 - Shift Traffic 50/50 to Reviews V1 and V3
+## 03 - Shift Traffic 50/50 to Reviews V1 and V3
+
+### Update Reviews Virtual Service
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -414,7 +414,9 @@ spec:
 
 ![](./images/demos/img004.png)
 
-### 04.1 - Shift All Traffic to Reviews V3
+## 04.1 - Shift All Traffic to Reviews V3
+
+### Update Reviews Virtual Service
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -435,7 +437,9 @@ spec:
 ![](./images/demos/img005.png)
 
 
-### 04.5 - Shift to Reviews V2 when Jason, else Reviews V3
+## 04.5 - Shift to Reviews V2 when Jason, else Reviews V3
+
+### Update Reviews Virtual Service
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -462,7 +466,9 @@ spec:
 
 ![](./images/demos/img006.png)
 
-### 05 - Delay 2 Seconds and Route to Ratings V1
+## 05 - Delay 2 Seconds and Route to Ratings V1
+
+### Update Rating Virtual Service
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -483,7 +489,9 @@ spec:
         subset: v1
 ```
 
-### 06 - Cause a timeout error if Reviews does not return in 0.5 Seconds
+## 06 - Cause a timeout error if Reviews does not return in 0.5 Seconds
+
+### Update Rating Virtual Service
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3

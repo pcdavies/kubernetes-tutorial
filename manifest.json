@@ -48,6 +48,15 @@
                 "labels": {
                     "version": "Self-Service"
                 }
+            },
+            {
+                "number": "600",
+                "filename": "Demos.md",
+                "title": "6-Optional Istio Demos",
+                "description": "YAML for Istio Demos",
+                "labels": {
+                    "version": "Self-Service"
+                }
             }
         ]
     }

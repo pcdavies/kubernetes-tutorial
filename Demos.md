@@ -329,9 +329,9 @@ spec:
 
 ![](./images/demos/img002.png)
 
-## 02 - Route to Reviews Version 1
+## Modify Routing 
 
-### Create Virtual Services
+### 02 - Route to Reviews Version 1
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -388,9 +388,7 @@ spec:
 ```
 ![](./images/demos/img003.png)
 
-## 03 - Shift Traffic 50/50 to Reviews V1 and V3
-
-### Update Reviews Virtual Service
+### 03 - Shift Traffic 50/50 to Reviews V1 and V3
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -414,9 +412,7 @@ spec:
 
 ![](./images/demos/img004.png)
 
-## 04.1 - Shift All Traffic to Reviews V3
-
-### Update Reviews Virtual Service
+### 04.1 - Shift All Traffic to Reviews V3
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -437,9 +433,7 @@ spec:
 ![](./images/demos/img005.png)
 
 
-## 04.5 - Shift to Reviews V2 when Jason, else Reviews V3
-
-### Update Reviews Virtual Service
+### 04.5 - Shift to Reviews V2 when Jason, else Reviews V3
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -466,9 +460,7 @@ spec:
 
 ![](./images/demos/img006.png)
 
-## 05 - Delay 2 Seconds and Route to Ratings V1
-
-### Update Rating Virtual Service
+### 05 - Delay 2 Seconds and Route to Ratings V1
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -489,9 +481,7 @@ spec:
         subset: v1
 ```
 
-## 06 - Cause a timeout error if Reviews does not return in 0.5 Seconds
-
-### Update Rating Virtual Service
+### 06 - Cause a timeout error if Reviews does not return in 0.5 Seconds
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -571,6 +561,8 @@ spec:
 
 
     ![](./images/demos/img009.png)
+
+## Add MongoDB
 
 ### 09.1 Install MongoDB and Rating Service
 
@@ -678,6 +670,8 @@ spec:
 
 ![](./images/demos/img014.png)
 
+## Add MySQL
+
 ### 09.8 MySQL Access to Remove VM
 
 - Create the Service in a separate namespace
@@ -766,7 +760,7 @@ spec:
 
 ![](./images/demos/img015.png)
 
-## Egress Access
+## Add Egress Access
 
 ### 10.1 Create Sleep Service
 

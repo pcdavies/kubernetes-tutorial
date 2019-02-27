@@ -10,8 +10,7 @@ export SOURCE_POD=$(kubectl get pod -n $DEFAULT_ISTIO_NAMESPACE -l app=sleep -o 
 echo 'Connecting to pod....'
 echo 'kubectl exec -it $SOURCE_POD -c sleep sh'
 echo ' '
-echo 'Once Connected, Enter this command - NOTE: Failure should occur:'
-echo ' '
+echo 'Once Connected, Enter this command - NOTE: A Failure should occur when sending curl command!!!:'
 echo 'curl http://httpbin.org/headers -I'
 echo ' '
 kubectl exec -it $SOURCE_POD -n $DEFAULT_ISTIO_NAMESPACE -c sleep sh

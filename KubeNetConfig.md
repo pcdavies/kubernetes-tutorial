@@ -261,7 +261,7 @@ The following is to be performed on the **kmaster** image
 - Expose the port
 
     ```
-    kubectl expose deployment nginx-server --port=80 --name=nginx-http
+    kubectl expose deployment nginx-http --port=80 --name=nginx-http
     ```
 
 - Get the service info

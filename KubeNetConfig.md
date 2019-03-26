@@ -229,7 +229,7 @@ The following is to be performed on the **kmaster** image
     apiVersion: extensions/v1beta1
     kind: Deployment
     metadata:
-      name: nginx-server
+      name: nginx-http
       namespace: default
     spec:
       replicas: 1

@@ -23,47 +23,6 @@ The following is to be performed on the **kmaster** image
 
 ### **Step 1 -** ***Potential Windows Nodes***: Install the Flannel Network
 
-- Patch the linux kube-proxy DaemonSet to target Linux only. 
-
-    Run commands as `kubeuser` at the **$** prompt
-    ```
-    kubectl get ds/kube-proxy -o go-template='{{.spec.updateStrategy.type}}{{"\n"}}' --namespace=kube-system
-    ```
-
-- Create this file
-
-    ```
-    vi node-selector-patch.yml
-    ```
-- Past the fillowing into the file, and save
-
-    ```yaml
-    spec:
-      template:
-        spec:
-          nodeSelector:
-            beta.kubernetes.io/os: linux
-    ```
-
-- Patch the damon setls
-
-
-    ```
-    kubectl patch ds/kube-proxy --patch "$(cat node-selector-patch.yml)" -n=kube-system
-    ```
-
-- check on the patch
-
-    ```
-    kubectl get ds -n kube-system
-    ```
-
-    ![](images/kubenetconfig/img33.2.png)
-
-- Follow the instruction from here titled **Collecting Cluster Info** to identify some of the information needed later.
-
-    [Microsoft Doc](https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/creating-a-linux-master)
-
 - It is recommended to enable bridged IPv4 traffic to iptables chains when using Flannel. This can be done using the following command:
 
     ```
@@ -82,10 +41,46 @@ The following is to be performed on the **kmaster** image
     wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
     ```
 
-- Run the following **sed** command to change `vxlan` to `host-gw` in the **kube-flannel.yml** file
+- There are two sections you should modify to enable the vxlan networking backend:
+  
+    After applying the steps below, the net-conf.json section of kube-flannel.yml should look as follows:
 
-    ```bash
-    sed 's/vxlan/host-gw/' -i kube-flannel.yml
+    ```json
+    net-conf.json: |
+        {
+          "Network": "10.244.0.0/16",
+          "Backend": {
+            "Type": "vxlan",
+            "VNI" : 4096,
+            "Port": 4789
+          }
+        }
+    ```
+    
+- ***Note*** The VNI must be set to 4096 and port 4789 for Flannel on Linux to interoperate with Flannel on Windows. Support for other VNIs is coming soon. See the VXLAN documentation at https://github.com/coreos/flannel/blob/master/Documentation/backends.md#vxlan for an explanation of these fields.
+
+- You **cni-conf.json** should look as follows:
+
+    ```json
+    cni-conf.json: |
+        {
+          "name": "vxlan0",
+          "plugins": [
+            {
+              "type": "flannel",
+              "delegate": {
+                "hairpinMode": true,
+                "isDefaultGateway": true
+              }
+            },
+            {
+              "type": "portmap",
+              "capabilities": {
+                "portMappings": true
+              }
+            }
+          ]
+        }
     ```
 
 - Apply the flannel network
@@ -116,6 +111,52 @@ The following is to be performed on the **kmaster** image
     ```
 
     ![](images/kubenetconfig/img33.6.png)
+
+- Patch the linux kube-proxy DaemonSet to target Linux only. ***Note: Don't run this. Testing***
+
+    Run commands as `kubeuser` at the **$** prompt
+    ```
+    kubectl get ds/kube-proxy -o go-template='{{.spec.updateStrategy.type}}{{"\n"}}' --namespace=kube-system
+    ```
+
+- Create this file
+
+    ```
+    vi node-selector-patch.yml
+    ```
+- Past the fillowing into the file, and save
+
+    ```yaml
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            beta.kubernetes.io/os: linux
+    ```
+
+- Patch the damon setls
+
+
+    ```
+    kubectl patch ds/kube-proxy --patch "$(cat node-selector-patch.yml)" -n=kube-system
+    
+    kubectl patch ds/kube-flannel-ds-amd64 --patch "$(cat node-selector-patch.yml)" -n=kube-system
+    ```
+
+- check on the patch
+
+    ```
+    kubectl get ds -n kube-system
+    ```
+
+    ![](images/kubenetconfig/img33.2.png)
+
+- Follow the instruction from here titled **Collecting Cluster Info** to identify some of the information needed later.
+
+    [Microsoft Doc - K8s 1.13](https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/creating-a-linux-master)
+    [Microsoft Doc - K8s 1.14](https://kubernetes.io/docs/setup/windows/user-guide-windows-nodes/)
+
+
 
 ## Dashboard Install
     
@@ -289,4 +330,3 @@ The following is to be performed on the **kmaster** image
 **OR**
 
 - Got to the [Istio.md Document](./README.md) to install and configure Istio
-

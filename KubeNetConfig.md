@@ -151,13 +151,6 @@ The following is to be performed on the **kmaster** image
 
     ![](images/kubenetconfig/img33.2.png)
 
-- Follow the instruction from here titled **Collecting Cluster Info** to identify some of the information needed later.
-
-    [Microsoft Doc - K8s 1.13](https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/creating-a-linux-master)
-    [Microsoft Doc - K8s 1.14](https://kubernetes.io/docs/setup/windows/user-guide-windows-nodes/)
-
-
-
 ## Dashboard Install
     
 ### **Step 2**: Install the Dashboard

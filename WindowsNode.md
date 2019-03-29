@@ -57,7 +57,13 @@
 
 ### **Step 4**: Enable Remote Desktop and a Shared Drive
 
-- **Exit Powershell**, then Enable Remote Desktop
+- create a **k** directory
+
+    ```
+    mkdir c:\k
+    ```
+
+- **Exit Powershell**, The following command to Enable Remote Desktop runs from the a **cmd** window
 
     ```
     Cscript %windir%\system32\SCRegEdit.wsf /ar 0
@@ -76,6 +82,14 @@
     ```
 ### **Step 5**: Install Docker
 
+- As background, much of the information provided below was acruired from these links, and from the section titled **Collecting Cluster Info**:
+
+    [Microsoft Doc - K8s 1.13](https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/creating-a-linux-master)
+    
+    [Microsoft Doc - K8s 1.14](https://kubernetes.io/docs/setup/windows/user-guide-windows-nodes/)
+
+
+
 - Install Docker Module - Anser yes when prompted
 
     ```
@@ -92,6 +106,8 @@
     ```
     Rename-computer knodew
     ```
+
+- Before restarting the computer, some have found **this Windows patch required** to allow the flannel network to be created in later steps. [Use this URL](http://download.windowsupdate.com/c/msdownload/update/software/updt/2019/02/windows10.0-kb4482887-x64_826158e9ebfcabe08b425bf2cb160cd5bc1401da.msu) to download and install the patch. 
 
 - Restart the image
 
@@ -138,12 +154,6 @@
 
 ### **Step 7**: Get the required Kubernetes Software Configured
 
-- Make a c:\k directory
-
-    ```
-    mkdir c:\k
-    ```
-
 - Change to the `K` directory
 
     ```
@@ -156,7 +166,7 @@
     scp kubeuser@kmaster:.kube/config .
     ```
 
-- Download the [Kubenetes Node executables for Windows - 64 bit](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.12.md#node-binaries) and place `'kubeadm.exe`, `kubectl.exe`, `kubelet.exe` and, `kube-proxy.exe` binaries on the `c:/K` drive
+- Download the [Kubenetes Node executables for Windows - 64 bit](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.14.md#node-binaries) and place `'kubeadm.exe`, `kubectl.exe`, `kubelet.exe` and, `kube-proxy.exe` binaries on the `c:/K` drive
 
 - Add `K` to the path and make it permanent
 
@@ -189,13 +199,8 @@
     ```
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-    wget https://github.com/Microsoft/SDN/archive/master.zip -o master.zip
+    wget https://raw.githubusercontent.com/Microsoft/SDN/master/Kubernetes/flannel/start.ps1 -o c:\k\start.ps1
 
-    Expand-Archive master.zip -DestinationPath master
-
-    mv master/SDN-master/Kubernetes/flannel/l2bridge/* C:/k/
-
-    rm -recurse -force master,master.zip
     ```
 
 ### **Step 8**: Join knode **(Windows)** to kmaster
@@ -205,9 +210,7 @@
     ```
     cd c:\k
 
-    chcp 65001
-
-    .\start.ps1 -ManagementIP <Windows Node IP> -ClusterCIDR 10.244.0.0/16 -ServiceCIDR 10.96.0.0/12 -KubeDnsServiceIP 10.96.0.10
+    .\start.ps1 -ManagementIP <Windows Node IP> -NetworkMode overlay -ClusterCIDR 10.244.0.0/16 -ServiceCIDR 10.96.0.0/12 -KubeDnsServiceIP 10.96.0.10 -LogDir C:\k
     ```
 - Create a windows namespace. We will always install Windows pods using this namespace, as the default namespace will be configured to automatically install the istio side car container. This would cause and error on the Windows ndoes, as side cars are not yet supported.
 

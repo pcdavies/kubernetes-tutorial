@@ -16,13 +16,9 @@
 
     # cd ist*
 
-    curl -L https://github.com/istio/istio/releases/download/1.0.5/istio-1.0.5-linux.tar.gz -o istio-1.0.5-linux.tar.gz
+    curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.0.5 sh -
 
-    gunzip istio-1.0.5-linux.tar.gz
-
-    tar -xvf istio-1.0.5-linux.tar
-
-    cd isti*
+    cd istio-1.0.5
     ```
 
 - Add the path of your current directory to your .bashrc, and source that file ***Note***: The version (e.g. 1.0.5) shown below might not be correct - you ***MUST*** set the right verion for your path

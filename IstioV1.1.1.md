@@ -16,9 +16,9 @@
 
     # cd ist*
 
-    curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.0.5 sh -
+    curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.1.1 sh -
 
-    cd istio-1.0.5
+    cd istio-1.1.1
     ```
 
 - Add the path of your current directory to your .bashrc, and source that file ***Note***: The version (e.g. 1.0.5) shown below might not be correct - you ***MUST*** set the right verion for your path
@@ -45,30 +45,50 @@
     ./get_helm.sh
 
     # Note: The command above will require your sudo password
+    ```
 
+    Initialize Helm
+    ```
     helm init
     ```
+
+    To use the Istio release Helm chart repository, add the Istio release repository as follows:
+    ```
+    helm repo add istio.io https://storage.googleapis.com/istio-release/releases/1.1.1/charts/
+    ```
+
 ### **Step 3**: Install Istio with Helm Template
 
-- Render Istio's core componentes to a Kubernetes Manifest
+Run all commands a the **$** prompt:
 
-    Run all commands a the **$** prompt:
-    ```bash
-    helm template install/kubernetes/helm/istio --name istio --namespace istio-system > $HOME/istio.yaml
-    ```
+- Create the istio namespace
 
-- Install using the manifest
-
-    Run all commands a the **$** prompt:
     ```
     kubectl create namespace istio-system
+    ```
+    
+- Install all the Istio Custom Resource Definitions (CRDs) using kubectl apply, and wait a few seconds for the CRDs to be committed in the Kubernetes API-server:
 
-    kubectl apply -f $HOME/istio.yaml
+    ```
+    helm template install/kubernetes/helm/istio-init --name istio-init --namespace istio-system | kubectl apply -f -
+    ```
+
+- Verify that all 53 Istio CRDs were committed to the Kubernetes api-server using the following command:
+
+    ```
+    kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l
+    ```
+    The command above should return the number **53** - **wait for that result**
+
+- Apply the istio core components. ***Note***: In the [istio installation documentation](https://istio.io/docs/setup/kubernetes/install/helm/), multiple Configuration profiles are provided. We are using the **demo** option, which will work great for our purposes, but other options may be better for other types of installations :
+
+    ```
+    helm template install/kubernetes/helm/istio --name istio --namespace istio-system \
+    --values install/kubernetes/helm/istio/values-istio-demo.yaml | kubectl apply -f -
     ```
 
 - Verify Install
 
-    Run all commands a the **$** prompt:
     ```
     kubectl get svc -n istio-system
 

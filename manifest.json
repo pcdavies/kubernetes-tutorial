@@ -44,7 +44,15 @@
                 "number": "500",
                 "filename": "Istio.md",
                 "title": "5-Optional Istio Setup",
-                "description": "Optionally configure the Istio Service Mesh",
+                "description": "Optionally configure the V1.0.5 Istio Service Mesh",
+                "labels": {
+                    "version": "Self-Service"
+                }
+            },            {
+                "number": "510",
+                "filename": "IstioV1.1.1.md",
+                "title": "5-Optional Istio Setup",
+                "description": "Under Dev - configure the V1.1.1 Istio Service Mesh",
                 "labels": {
                     "version": "Self-Service"
                 }

@@ -12,9 +12,17 @@
 
     Run all commands a the **$** prompt:
     ```bash
-    curl -L https://git.io/getLatestIstio | sh -
+    # curl -L https://git.io/getLatestIstio | sh -
 
-    cd ist*
+    # cd ist*
+
+    curl -L https://github.com/istio/istio/releases/download/1.0.5/istio-1.0.5-linux.tar.gz -o istio-1.0.5-linux.tar.gz
+
+    gunzip istio-1.0.5-linux.tar.gz
+
+    tar -xvf istio-1.0.5-linux.tar
+
+    cd isti*
     ```
 
 - Add the path of your current directory to your .bashrc, and source that file ***Note***: The version (e.g. 1.0.5) shown below might not be correct - you ***MUST*** set the right verion for your path
@@ -39,6 +47,8 @@
     chmod 700 get_helm.sh
 
     ./get_helm.sh
+
+    # Note: The command above will require your sudo password
 
     helm init
     ```
@@ -77,34 +87,39 @@
 
 - The instructions summarized below can be found [Here](https://istio.io/docs/examples/bookinfo/)
 
-- Since "Automatic Sidecar Injection" is possible, use this options documented below. As an additional Note: Notice that we are setting istio up to perform auto sidecar injection on the **default** namespace. You can use another namespace in place of default, however, when deploying the applications, services, etc. for the booking example, you would be required to explicitly specify the namespace you created. The tasks documented below will use the **default** namespace. However, after completing this tutorial, you may want to explore the [./samples/istio](./samples/istio) folder in this repository for examples of how to use a different namespace. 
+- Since "Automatic Sidecar Injection" is possible, use this options documented below. As an additional Note: Notice that we are setting istio up to perform auto sidecar injection on the **istio-demos** namespace (which we will create). You can use another namespace in place of istio-demos, however, when deploying the applications, services, etc. for the booking example, you would be required to explicitly specify the namespace you created. The tasks documented below will use the **istio-demos** namespace. However, after completing this tutorial, you may want to explore the [./samples/istio](./samples/istio) folder in this repository for examples of how to use a different namespace. 
+
+    create a namespace into which our demos will be deployed
+    ```
+    kubectl create namespace istio-demos
+
+    kubectl label namespace istio-demos istio-injection=enabled
+    ```
 
     Run all commands a the **$** prompt:
     ```
-    kubectl label namespace default istio-injection=enabled
-
-    kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+    kubectl apply -n istio-demos -f samples/bookinfo/platform/kube/bookinfo.yaml
     ```
 
     Run all commands a the **$** prompt:
     ```
-    kubectl get services
+    kubectl get services -n istio-demos
 
-    kubectl get pods
+    kubectl get pods -n istio-demos
     ```
 
 - Set ingress gateway for applications
 
     Run all commands a the **$** prompt:
     ```
-    kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
+    kubectl apply -n istio-demos -f samples/bookinfo/networking/bookinfo-gateway.yaml
     ```
 
 - Check Gateway
 
     Run all commands a the **$** prompt:
     ```
-    kubectl get gateway
+    kubectl get gateway -n istio-demos
     ```
 
 - Determine IP and Port
@@ -133,7 +148,7 @@
 
     Run all commands a the **$** prompt:
     ```
-    kubectl apply -f samples/bookinfo/networking/destination-rule-all-mtls.yaml
+    kubectl apply -n istio-demos -f samples/bookinfo/networking/destination-rule-all-mtls.yaml
     ```
 - Test the application - you should see are **200** return code
 
@@ -153,10 +168,10 @@
 - Display what will be removed
 
     ```
-    kubectl get virtualservices
-    kubectl get destinationrules
-    kubectl get gateway
-    kubectl get pods
+    kubectl get virtualservices -n istio-demos
+    kubectl get destinationrules -n istio-demos
+    kubectl get gateway -n istio-demos
+    kubectl get pods -n istio-demos
     ```
 
 - Run the script to delete the services - ***Run from istio directory***
@@ -168,10 +183,10 @@
 - Make sure everythign was removed
 
     ```
-    kubectl get virtualservices   #-- there should be no virtual services
-    kubectl get destinationrules  #-- there should be no destination rules
-    kubectl get gateway           #-- there should be no gateway
-    kubectl get pods               #-- the Bookinfo pods should be deleted
+    kubectl get virtualservices -n istio-demos   #-- there should be no virtual services
+    kubectl get destinationrules -n istio-demos  #-- there should be no destination rules
+    kubectl get gateway -n istio-demos           #-- there should be no gateway
+    kubectl get pods -n istio-demos              #-- the Bookinfo pods should be deleted
     ```
 
 ## Installing Monitoring Tools
@@ -212,13 +227,13 @@
 
 - Populate environment variables with the username and password for Kiali.
 
-- First get the username:
+- First get the username - e.g. `admin`:
 
     ```
     KIALI_USERNAME=$(read -p 'Kiali Username: ' uval && echo -n $uval | base64)
     ```
 
-- Now get the password:
+- Now get the password - e.g. `admin`:
 
     ```
     KIALI_PASSPHRASE=$(read -sp 'Kiali Passphrase: ' pval && echo -n $pval | base64)

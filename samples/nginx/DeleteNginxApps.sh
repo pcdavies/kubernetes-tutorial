@@ -11,11 +11,11 @@ fi
 kubectl delete deployment app1 -n=$DEFAULT_NAMESPACE
 kubectl delete deployment app2 -n=$DEFAULT_NAMESPACE
 
-kubectl delete deployment iis-deploy -n=$DEFAULT_NAMESPACE
+kubectl delete deployment iis-deploy -n=windows
 
 kubectl delete service appsvc1 -n=$DEFAULT_NAMESPACE
 kubectl delete service appsvc2 -n=$DEFAULT_NAMESPACE
 
-kubectl delete service iis-svc -n=$DEFAULT_NAMESPACE
+kubectl delete service iis-svc -n=windows
 
 kubectl delete ingress app-ingress -n=$DEFAULT_NAMESPACE

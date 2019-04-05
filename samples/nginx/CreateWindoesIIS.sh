@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+kubectl create namespace windows
+
 kubectl apply -f -<<EOF
 apiVersion: apps/v1
 kind: Deployment

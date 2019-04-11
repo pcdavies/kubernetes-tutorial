@@ -226,12 +226,6 @@ Note: In this example we will configure all nodes using a single NAT network.
     yum install -y kubelet kubeadm kubectl docker -y
     ```
 
-- Update the kubernetes config file:
-
-    ```bash
-    sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-    ```
-
 - Enable docker and kubernetes
 
     ```

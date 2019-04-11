@@ -97,6 +97,21 @@ The following is to be performed on the **kmaster** image
 
     ![](images/kubenetconfig/img33.5.png)
 
+- Create this file
+
+    ```
+    vi node-selector-patch.yml
+    ```
+    
+- Past the fillowing into the file, and save
+
+    ```yaml
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            beta.kubernetes.io/os: linux
+    ```
 
 - Apply the patch to the Flannel Network - ***Note**: Ensure that you select the correct flannel pod for your system. In this example, I'm using **amd64**, but you might use arm, arm64, ppc64le, s390x, etc.
 
@@ -117,21 +132,6 @@ The following is to be performed on the **kmaster** image
     Run commands as `kubeuser` at the **$** prompt
     ```
     kubectl get ds/kube-proxy -o go-template='{{.spec.updateStrategy.type}}{{"\n"}}' --namespace=kube-system
-    ```
-
-- Create this file
-
-    ```
-    vi node-selector-patch.yml
-    ```
-- Past the fillowing into the file, and save
-
-    ```yaml
-    spec:
-      template:
-        spec:
-          nodeSelector:
-            beta.kubernetes.io/os: linux
     ```
 
 - Patch the damon setls

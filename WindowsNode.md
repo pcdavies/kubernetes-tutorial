@@ -101,6 +101,9 @@
     ```
     Install-Package -Name Docker -ProviderName DockerMsftProvider
     ```
+    
+  - If the install fails, manually download the docker zip file from microsoft and place it in the expected folder. See [this page](http://dockermsft.blob.core.windows.net/dockercontainer?resType=container&comp=list) for zip file download locations. 
+    
 - Set the Hostname of the windows Image
 
     ```

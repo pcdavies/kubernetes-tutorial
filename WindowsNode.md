@@ -215,6 +215,9 @@
 
     .\start.ps1 -ManagementIP <Windows Node IP> -NetworkMode overlay -ClusterCIDR 10.244.0.0/16 -ServiceCIDR 10.96.0.0/12 -KubeDnsServiceIP 10.96.0.10 -LogDir C:\k
     ```
+    
+    -- Validate the name of the ethernet adapter -- may have to change it to Ethernet0 for VMware Fusion
+    
 - Create a windows namespace. We will always install Windows pods using this namespace, as the default namespace will be configured to automatically install the istio side car container. This would cause and error on the Windows ndoes, as side cars are not yet supported.
 
     ```

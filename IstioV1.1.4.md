@@ -16,9 +16,9 @@
 
     # cd ist*
 
-    curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.1.1 sh -
+    curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.1.4 sh -
 
-    cd istio-1.1.1
+    cd istio-1.1.4
     ```
 
 - Add the path of your current directory to your .bashrc, and source that file ***Note***: The version (e.g. 1.0.5) shown below might not be correct - you ***MUST*** set the right verion for your path
@@ -54,7 +54,7 @@
 
     To use the Istio release Helm chart repository, add the Istio release repository as follows:
     ```
-    helm repo add istio.io https://storage.googleapis.com/istio-release/releases/1.1.1/charts/
+    helm repo add istio.io https://storage.googleapis.com/istio-release/releases/1.1.4/charts/
     ```
 
 ### **Step 3**: Install Istio with Helm Template

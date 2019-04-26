@@ -50,9 +50,9 @@
                 }
             },            {
                 "number": "510",
-                "filename": "IstioV1.1.1.md",
+                "filename": "IstioV1.1.4.md",
                 "title": "5-Optional Istio Setup",
-                "description": "Under Dev - configure the V1.1.1 Istio Service Mesh",
+                "description": "Under Dev - configure the V1.1.4 Istio Service Mesh",
                 "labels": {
                     "version": "Self-Service"
                 }

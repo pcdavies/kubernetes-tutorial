@@ -239,7 +239,7 @@ Run all commands a the **$** prompt:
     kubectl get pods -n=istio-system
     ```
 
-### **Step 8**: Install Kiali
+### **Step 8**: Configuring Kiali
 
 - Populate environment variables with the username and password for Kiali.
 
@@ -274,31 +274,16 @@ Run all commands a the **$** prompt:
 
     ```
 
-- Using helm add Kiali to the istio.yaml and apply
+- Set the port forwarding from a terminal
 
     ```
-    helm template --set kiali.enabled=true install/kubernetes/helm/istio --name istio --namespace istio-system > $HOME/istio.yaml
-
-    kubectl apply -f $HOME/istio.yaml
+    $ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001
     ```
 
-- run get pods and look for **kiali....** and wait until it's **Running**
+- Visit this URL:
 
     ```
-    kubectl get pods -n=istio-system
-    ```
-
-- Set some of the Kiali dashboard endpoints
-
-    ```
-    helm template \
-        --set kiali.enabled=true \
-        --set "kiali.dashboard.jaegerURL=http://$(kubectl get svc tracing -n=istio-system -o jsonpath='{.spec.clusterIP}'):80" \
-        --set "kiali.dashboard.grafanaURL=http://$(kubectl get svc grafana -n=istio-system -o jsonpath='{.spec.clusterIP}'):3000" \
-        install/kubernetes/helm/istio \
-        --name istio --namespace istio-system > $HOME/istio.yaml
-
-    kubectl apply -f $HOME/istio.yaml
+    http://localhost:20001/kiali/console 
     ```
 
 ### **Step 9**: Install Service Graph

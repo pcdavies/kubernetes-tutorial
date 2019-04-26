@@ -101,6 +101,9 @@
     ```
     Install-Package -Name Docker -ProviderName DockerMsftProvider
     ```
+    
+  - If the install fails, manually download the docker zip file from microsoft and place it in the expected folder. See [this page](http://dockermsft.blob.core.windows.net/dockercontainer?resType=container&comp=list) for zip file download locations. 
+    
 - Set the Hostname of the windows Image
 
     ```
@@ -212,6 +215,9 @@
 
     .\start.ps1 -ManagementIP <Windows Node IP> -NetworkMode overlay -ClusterCIDR 10.244.0.0/16 -ServiceCIDR 10.96.0.0/12 -KubeDnsServiceIP 10.96.0.10 -LogDir C:\k
     ```
+    
+    -- Validate the name of the ethernet adapter -- may have to change it to Ethernet0 for VMware Fusion
+    
 - Create a windows namespace. We will always install Windows pods using this namespace, as the default namespace will be configured to automatically install the istio side car container. This would cause and error on the Windows ndoes, as side cars are not yet supported.
 
     ```
@@ -246,52 +252,52 @@
 
 - Enter the following text into the file, and save the file
 
-    ```
-    apiVersion: apps/v1
-    kind: Deployment
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iis-deploy
+  namespace: windows
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iis
+  template:
     metadata:
-    name: iis-deploy
-    namespace: windows
+      labels:
+        app: iis
     spec:
-    replicas: 1
-    selector:
-        matchLabels:
-        app: iis
-    template:
-        metadata:
-        labels:
-            app: iis
-        spec:
-        containers:
-        - name: iis
-            image: mcr.microsoft.com/windows/servercore/iis:windowsservercore-ltsc2019
-            resources:
-            limits:
-                memory: "128Mi"
-                cpu: 2
-            ports:
-            - containerPort: 80
-        nodeSelector:
-            beta.kubernetes.io/os: windows
-        tolerations:
-        - key: "opsys-taint"
-            operator: Equal
-            value: "windows"
-    ---
-    apiVersion: v1
-    kind: Service
-    metadata:
-    labels:
-        app: iis
-    name: iis-svc
-    namespace: windows
-    spec:
-    type: NodePort
-    ports:
-        - port: 80
-    selector:
-        app: iis
-    ```
+      containers:
+      - name: iis
+        image: mcr.microsoft.com/windows/servercore/iis:windowsservercore-ltsc2019
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: 2
+        ports:
+        - containerPort: 80
+      nodeSelector:
+        beta.kubernetes.io/os: windows
+      tolerations:
+      - key: opsys-taint
+        operator: Equal
+        value: "windows"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: iis
+  name: iis-svc
+  namespace: windows
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+  selector:
+    app: iis
+```
 
 - Apply the file to cause it to be loaded into the cluster
 

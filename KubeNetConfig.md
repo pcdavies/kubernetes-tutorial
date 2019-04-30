@@ -41,7 +41,7 @@ The following is to be performed on the **kmaster** image
     wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
     ```
 
-- There are two sections you should modify to enable the vxlan networking backend:
+- You will now edit the **kube-flannel.yml** file. There are two sections you should modify to enable the vxlan networking backend:
   
     After applying the steps below, the net-conf.json section of kube-flannel.yml should look as follows:
 
@@ -59,7 +59,7 @@ The following is to be performed on the **kmaster** image
     
 - ***Note*** The VNI must be set to 4096 and port 4789 for Flannel on Linux to interoperate with Flannel on Windows. Support for other VNIs is coming soon. See the VXLAN documentation at https://github.com/coreos/flannel/blob/master/Documentation/backends.md#vxlan for an explanation of these fields.
 
-- You **cni-conf.json** should look as follows:
+- Your **cni-conf.json** should look as follows:
 
     ```json
     cni-conf.json: |

@@ -57,6 +57,15 @@
                 "labels": {
                     "version": "Self-Service"
                 }
+            },
+            {
+                "number": "700",
+                "filename": "linkerd.md",
+                "title": "7-Linkerd setup",
+                "description": "Linkerd as alternative service mesh",
+                "labels": {
+                    "version": "Self-Service"
+                }
             }
         ]
     }
